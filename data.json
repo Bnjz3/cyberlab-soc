@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P2-SOAR BAN)",
+  "threat_level": "WASPADA (P1-SIMULASI)",
   "summary": "Pada 22 November 2026 terjadi restart layanan DNS (dnsmasq) dan https‑dns‑proxy, serta proses pembaruan banIP. Aktivitas yang paling mencolok adalah beberapa sesi SSH masuk sebagai user root dari alamat internal 192.168.10.3 menggunakan otentikasi kunci publik. Login root via SSH dari jaringan LAN dapat menandakan penggunaan kredensial yang sah atau potensi kompromi.",
   "log_sample": "<85>Nov 22 23:46:21 Ipad dropbear[17005]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:48768",
   "forensic_analysis": "Field breakdown:\n- `<85>`: PRI (facility+severity). 85 = facility 10 (security/authorization) + severity 5 (notice).\n- `Nov 22 23:46:21`: Timestamp (lokal WIB).\n- `Ipad`: Hostname perangkat OpenWrt.\n- `dropbear[17005]`: Proses daemon SSH Dropbear dengan PID 17005.\n- `Pubkey auth succeeded for 'root'`: Indikasi otentikasi kunci publik berhasil untuk akun root.\n- `ssh-ed25519 key SHA256:...`: Fingerprint kunci publik yang dipakai.\n- `from 192.168.10.3:48768`: Alamat IP sumber (client) dan port sumber. \n\nLog ini menunjukkan bahwa akun root berhasil login via SSH menggunakan kunci publik yang sudah terdaftar. Karena login berasal dari jaringan internal, hal ini dapat menjadi aktivitas administratif sah, namun juga merupakan vektor umum bagi penyerang yang telah memperoleh kredensial root. Perlu memeriksa apakah IP 192.168.10.3 adalah perangkat yang diotorisasi, serta meninjau jejak perintah yang dijalankan selama sesi tersebut.",
@@ -15,13 +15,6 @@
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 2,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:02 WIB",
-      "sev": "P2-INFO",
-      "src": "Karoun-SOAR",
-      "title": "Aksi Blokir IP (35.210.141.155)",
-      "detail": "Gagal SOAR CrowdSec: HTTP 500: {\"message\":\"validation failure list:\\n0.events in body is required\"}"
-    },
     {
       "ts": "23/11 00:06 WIB",
       "sev": "P2-INFO",
@@ -84,6 +77,13 @@
       "src": "Karoun-SOAR",
       "title": "Manual Ban IP (35.210.141.155)",
       "detail": "IP 35.210.141.155 diblokir 24h di firewall kernel via CrowdSec Bouncer."
+    },
+    {
+      "ts": "23/11 00:21 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji SOAR Inline Button (185.220.101.1)",
+      "detail": "Simulasi deteksi IP publik berbahaya dengan tombol blokir 1-klik."
     }
   ]
 }
