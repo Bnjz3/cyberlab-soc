@@ -16,13 +16,6 @@
   "known_macs_count": 0,
   "recent_alerts": [
     {
-      "ts": "22/11 23:21 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: docker-compose.yml"
-    },
-    {
       "ts": "22/11 23:22 WIB",
       "sev": "P1-FIM TAMPER",
       "src": "VPS-Host",
@@ -84,6 +77,13 @@
       "src": "Cowrie-Trap",
       "title": "Perintah Penyerang (10.10.10.2)",
       "detail": "CMD: cat /etc/passwd | IP Privat / Internal Lab"
+    },
+    {
+      "ts": "22/11 23:29 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (10.10.10.2)",
+      "detail": "CMD: exit | IP Privat / Internal Lab"
     }
   ]
 }
