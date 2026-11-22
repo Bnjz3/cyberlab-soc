@@ -1,0 +1,14 @@
+{
+  "threat_level": "AMAN / NORMAL",
+  "summary": "Gagal Groq API: HTTP 400: {\"error\":{\"message\":\"The model `canopylabs/orpheus-arabic-saudi` requires terms acceptance. Please have the org admin accept the terms at https://console.groq.com/playground?model=canopylabs%2Forpheus-arabic-saudi\",\"type",
+  "log_sample": "wYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:23688\n<86>Nov 22 21:43:01 Ipad dropbear[357]: Exit (root) from <192.168.10.3:23688>: Idle timeout\n<86>Nov 22 21:43:11 Ipad dropbear[6622]: Child connection from 192.168.10.3:55021\n<85>Nov 22 21:43:12 Ipad dropbear[6622]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:55021\n",
+  "forensic_analysis": "Gagal Groq API: HTTP 400: {\"error\":{\"message\":\"The model `canopylabs/orpheus-arabic-saudi` requires terms acceptance. Please have the org admin accept the terms at https://console.groq.com/playground?model=canopylabs%2Forpheus-arabic-saudi\",\"type",
+  "mitre_id": "T1078",
+  "mitre_name": "Valid Accounts",
+  "mitre_desc": "Pemantauan autentikasi akses admin.",
+  "mini_drill": "Jalankan logread -e dropbear di EA8300.",
+  "updated_at": "22 Nov 2026 21:47 WIB",
+  "log_lines": 33,
+  "ram_status": "569 / 1679 MB (Free 1110 MB)",
+  "model": "error"
+}
