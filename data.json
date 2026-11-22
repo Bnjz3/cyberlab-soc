@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P2-INFO)",
+  "threat_level": "WASPADA (P1-SIMULASI)",
   "summary": "Pada 22 November 2026 terjadi restart layanan DNS (dnsmasq) dan https‑dns‑proxy, serta proses pembaruan banIP. Aktivitas yang paling mencolok adalah beberapa sesi SSH masuk sebagai user root dari alamat internal 192.168.10.3 menggunakan otentikasi kunci publik. Login root via SSH dari jaringan LAN dapat menandakan penggunaan kredensial yang sah atau potensi kompromi.",
   "log_sample": "<85>Nov 22 23:46:21 Ipad dropbear[17005]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:48768",
   "forensic_analysis": "Field breakdown:\n- `<85>`: PRI (facility+severity). 85 = facility 10 (security/authorization) + severity 5 (notice).\n- `Nov 22 23:46:21`: Timestamp (lokal WIB).\n- `Ipad`: Hostname perangkat OpenWrt.\n- `dropbear[17005]`: Proses daemon SSH Dropbear dengan PID 17005.\n- `Pubkey auth succeeded for 'root'`: Indikasi otentikasi kunci publik berhasil untuk akun root.\n- `ssh-ed25519 key SHA256:...`: Fingerprint kunci publik yang dipakai.\n- `from 192.168.10.3:48768`: Alamat IP sumber (client) dan port sumber. \n\nLog ini menunjukkan bahwa akun root berhasil login via SSH menggunakan kunci publik yang sudah terdaftar. Karena login berasal dari jaringan internal, hal ini dapat menjadi aktivitas administratif sah, namun juga merupakan vektor umum bagi penyerang yang telah memperoleh kredensial root. Perlu memeriksa apakah IP 192.168.10.3 adalah perangkat yang diotorisasi, serta meninjau jejak perintah yang dijalankan selama sesi tersebut.",
@@ -7,42 +7,14 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penggunaan akun root yang sah untuk mengakses sistem melalui SSH merupakan contoh teknik Valid Accounts (T1078). Penyerang yang telah mencuri atau mengekstrak kunci privat dapat masuk tanpa memicu alarm brute‑force. SOC dapat mendeteksi dengan memantau log otentikasi (dropbear) untuk login root, membandingkan IP sumber dengan daftar perangkat yang diizinkan, dan menegakkan kebijakan penggunaan akun non‑privileged serta MFA bila memungkinkan.",
   "mini_drill": "logread -e \"dropbear\" | grep \"Pubkey auth succeeded\" | tail -n 5",
-  "updated_at": "23/11 00:02 WIB",
+  "updated_at": "23/11 00:08 WIB",
   "log_lines": 65,
   "ram_status": "631 / 1679 MB (Free 1048 MB)",
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
-  "known_macs_count": 0,
+  "known_macs_count": 1,
   "recent_alerts": [
-    {
-      "ts": "22/11 23:42 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
-    },
-    {
-      "ts": "22/11 23:43 WIB",
-      "sev": "P2-INFO",
-      "src": "VPS-Jakarta",
-      "title": "Eksekusi Perintah Root (sudo)",
-      "detail": "2026-11-23T00:43:35.540765+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/docker logs --tail 5 soc-agent"
-    },
-    {
-      "ts": "22/11 23:44 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
-    },
-    {
-      "ts": "22/11 23:44 WIB",
-      "sev": "P2-INFO",
-      "src": "OpenWrt-EA8300",
-      "title": "Login SSH Admin Terverifikasi",
-      "detail": "<85>Nov 22 23:44:30 Ipad dropbear[13574]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:23129"
-    },
     {
       "ts": "22/11 23:45 WIB",
       "sev": "P1-SIMULASI",
@@ -84,6 +56,34 @@
       "src": "Karoun-SOAR",
       "title": "Aksi Blokir IP (35.210.141.155)",
       "detail": "Gagal SOAR CrowdSec: HTTP 500: {\"message\":\"validation failure list:\\n0.events in body is required\"}"
+    },
+    {
+      "ts": "23/11 00:06 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-23T01:06:41.721121+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/python3 -c '#012p = \"soc-agent/soc_bot.py\"#012s = open(p, encoding=\"utf-8\").read()#012old = \"\\\\\"events_count\\\\\": 1,\"#01"
+    },
+    {
+      "ts": "23/11 00:07 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 23 00:06:53 Ipad dropbear[29812]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:62543"
+    },
+    {
+      "ts": "23/11 00:07 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-23T01:06:55.444135+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/docker logs --tail 5 soc-agent"
+    },
+    {
+      "ts": "23/11 00:08 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji SOAR Inline Button (185.220.101.1)",
+      "detail": "Simulasi deteksi IP publik berbahaya dengan tombol blokir 1-klik."
     }
   ]
 }
