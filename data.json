@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-FIM TAMPER)",
+  "threat_level": "WASPADA (P1-SIMULASI)",
   "summary": "Serangkaian koneksi SSH ke daemon Dropbear pada router OpenWrt berhasil masuk sebagai user root menggunakan kunci publik yang sama dari IP internal 192.168.10.3. Setiap sesi berakhir karena idle timeout, namun frekuensi login yang tinggi dalam rentang satu jam menandakan kemungkinan aktivitas otomatis atau penyalahgunaan kredensial.",
   "log_sample": "Nov 22 21:22:40 Ipad dropbear[25987]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:9251",
   "forensic_analysis": "Timestamp (Nov 22 21:22:40) menunjukkan waktu kejadian. Hostname 'Ipad' adalah nama perangkat OpenWrt. Proses 'dropbear[25987]' menandakan daemon SSH Dropbear dengan PID 25987. Pesan 'Pubkey auth succeeded' mengonfirmasi otentikasi kunci publik berhasil untuk user 'root'. Jenis kunci: ssh-ed25519 dengan fingerprint SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ. Sumber koneksi: IP internal 192.168.10.3, port sumber 9251. Setiap baris 'Exit (root) ...: Idle timeout' menandakan sesi berakhir karena tidak ada aktivitas, bukan karena logout manual. Pola berulang (berbagai port sumber) menunjukkan skrip atau alat otomatis yang membuka sesi SSH secara periodik.",
@@ -7,12 +7,12 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Aktivitas log menunjukkan penggunaan kredensial (kunci SSH) yang sah untuk mengakses akun root pada perangkat. Teknik ini termasuk dalam MITRE ATT&CK T1078, di mana penyerang memanfaatkan akun yang valid untuk memperoleh akses. Deteksi SOC dapat mencakup pemantauan login root via SSH, pencocokan fingerprint kunci, frekuensi login yang tidak wajar, serta korelasi dengan perubahan konfigurasi atau perintah administratif setelah login.",
   "mini_drill": "grep 'Pubkey auth succeeded' /var/log/messages | awk '{print $1,$2,$3,$9,$11,$13}' && cat /etc/dropbear/authorized_keys && sudo dropbearkey -y -f /etc/dropbear/authorized_keys",
-  "updated_at": "22/11 23:44 WIB",
+  "updated_at": "22/11 23:45 WIB",
   "log_lines": 64,
   "ram_status": "589 / 1679 MB (Free 1090 MB)",
   "model": "openai/gpt-oss-120b",
-  "fim_status": "TAMPER DETECTED",
-  "fim_detail": "Perubahan pada: soc_bot.py, docker-compose.yml",
+  "fim_status": "VERIFIED",
+  "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 0,
   "recent_alerts": [
     {
@@ -49,6 +49,20 @@
       "src": "VPS-Host",
       "title": "Modifikasi File Kritis Terdeteksi!",
       "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
+    },
+    {
+      "ts": "22/11 23:44 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 22 23:44:30 Ipad dropbear[13574]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:23129"
+    },
+    {
+      "ts": "22/11 23:45 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji SOAR Inline Button (185.220.101.1)",
+      "detail": "Simulasi deteksi IP publik berbahaya dengan tombol blokir 1-klik."
     }
   ]
 }
