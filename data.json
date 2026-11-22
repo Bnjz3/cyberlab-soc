@@ -21,6 +21,13 @@
       "src": "Cyberlab-SOC",
       "title": "Uji Peringatan Real-Time",
       "detail": "Notifikasi instan aktif & tersinkron ke Web Dashboard."
+    },
+    {
+      "ts": "22/11 22:59 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji Peringatan Real-Time",
+      "detail": "Notifikasi instan aktif & tersinkron ke Web Dashboard."
     }
   ]
 }
