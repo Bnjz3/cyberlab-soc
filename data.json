@@ -13,15 +13,8 @@
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
-  "known_macs_count": 8,
+  "known_macs_count": 9,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:26 WIB",
-      "sev": "P2-SOAR BAN",
-      "src": "Karoun-SOAR",
-      "title": "Aksi Blokir IP (117.151.25.243)",
-      "detail": "IP 117.151.25.243 diblokir 24h di firewall kernel via CrowdSec Bouncer."
-    },
     {
       "ts": "23/11 00:27 WIB",
       "sev": "P2-INFO",
@@ -84,6 +77,13 @@
       "src": "OpenWrt-EA8300",
       "title": "Perangkat Asing Masuk Wi-Fi (f4:cf:a2:0a:fc:e6)",
       "detail": "<30>Nov 23 02:06:26 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.80 f4:cf:a2:0a:fc:e6 ESP_0AFCE6"
+    },
+    {
+      "ts": "23/11 02:06 WIB",
+      "sev": "P1-NAC BARU",
+      "src": "OpenWrt-EA8300",
+      "title": "Perangkat Asing Masuk Wi-Fi (28:04:7a:36:db:b5)",
+      "detail": "<30>Nov 23 02:06:34 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.29 28:04:7a:36:db:b5"
     }
   ]
 }
