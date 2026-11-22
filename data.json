@@ -1,14 +1,26 @@
 {
-  "threat_level": "WASPADA",
-  "summary": "Terdapat serangkaian login SSH dan login web LUCI ke router OpenWrt dari IP internal 192.168.10.3 menggunakan akun root dengan otentikasi kunci publik. Setiap sesi berakhir karena idle timeout, menandakan aktivitas berulang yang dapat menjadi indikasi akun root telah disusupi atau penggunaan otomatis.",
-  "log_sample": "<85>Nov 22 21:12:25 Ipad dropbear[19202]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:47527",
-  "forensic_analysis": "Timestamp menunjukkan waktu lokal (WIB) saat login berhasil, misalnya 21:12:25. Daemon 'dropbear' adalah server SSH ringan pada OpenWrt, sementara 'luci' adalah antarmuka web. IP sumber 192.168.10.3 (MAC tidak tercatat di log) adalah host internal yang berulang kali melakukan otentikasi dengan kunci publik yang sama, menandakan kredensial root telah disimpan di host tersebut. Setiap sesi berakhir dengan 'Idle timeout', yang berarti tidak ada aktivitas lanjutan setelah beberapa menit.",
-  "mitre_id": "T1021.004",
-  "mitre_name": "Remote Services: SSH",
-  "mitre_desc": "Aktivitas login SSH menggunakan kunci publik yang valid merupakan contoh penggunaan layanan remote (SSH) untuk mengakses sistem. Teknik ini termasuk dalam MITRE ATT&CK Remote Services, di mana penyerang (atau pengguna sah) memanfaatkan kredensial yang sah untuk masuk. Deteksi dapat dilakukan dengan memantau log SSH untuk pola login berulang dari satu IP, penggunaan akun root, dan durasi sesi yang singkat (idle timeout).",
-  "mini_drill": "Perintah: `logread -e dropbear | grep \"Pubkey auth succeeded\"`\\nTujuan: Menampilkan semua entri log yang mencatat otentikasi kunci publik pada dropbear, sehingga analyst dapat cepat mengidentifikasi IP, user, dan fingerprint kunci yang digunakan dalam 5 menit.",
-  "updated_at": "22 Nov 2026 22:44 WIB",
-  "log_lines": 58,
-  "ram_status": "577 / 1679 MB (Free 1102 MB)",
-  "model": "openai/gpt-oss-120b"
+  "threat_level": "WASPADA (P1-SIMULASI)",
+  "summary": "Uji Peringatan Real-Time",
+  "log_sample": "Notifikasi instan aktif & tersinkron ke Web Dashboard.",
+  "forensic_analysis": "Notifikasi instan aktif & tersinkron ke Web Dashboard.",
+  "mitre_id": "T1078",
+  "mitre_name": "Valid Accounts",
+  "mitre_desc": "Deteksi real-time SOC.",
+  "mini_drill": "Periksa /status dan log terkait.",
+  "updated_at": "22/11 22:59 WIB",
+  "log_lines": 54,
+  "ram_status": "Nominal",
+  "model": "Enterprise-Watcher",
+  "fim_status": "VERIFIED",
+  "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
+  "known_macs_count": 0,
+  "recent_alerts": [
+    {
+      "ts": "22/11 22:59 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji Peringatan Real-Time",
+      "detail": "Notifikasi instan aktif & tersinkron ke Web Dashboard."
+    }
+  ]
 }
