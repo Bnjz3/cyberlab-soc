@@ -1,16 +1,16 @@
 {
-  "threat_level": "WASPADA (P1-NAC BARU)",
-  "summary": "Simulasi Perangkat Asing (de:ad:be:ef:00:99)",
-  "log_sample": "DHCPACK(br-lan) 192.168.10.249 de:ad:be:ef:00:99 Unknown-Device",
-  "forensic_analysis": "DHCPACK(br-lan) 192.168.10.249 de:ad:be:ef:00:99 Unknown-Device",
+  "threat_level": "WASPADA",
+  "summary": "Serangkaian koneksi SSH ke daemon Dropbear pada router OpenWrt berhasil masuk sebagai user root menggunakan kunci publik yang sama dari IP internal 192.168.10.3. Setiap sesi berakhir karena idle timeout, namun frekuensi login yang tinggi dalam rentang satu jam menandakan kemungkinan aktivitas otomatis atau penyalahgunaan kredensial.",
+  "log_sample": "Nov 22 21:22:40 Ipad dropbear[25987]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:9251",
+  "forensic_analysis": "Timestamp (Nov 22 21:22:40) menunjukkan waktu kejadian. Hostname 'Ipad' adalah nama perangkat OpenWrt. Proses 'dropbear[25987]' menandakan daemon SSH Dropbear dengan PID 25987. Pesan 'Pubkey auth succeeded' mengonfirmasi otentikasi kunci publik berhasil untuk user 'root'. Jenis kunci: ssh-ed25519 dengan fingerprint SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ. Sumber koneksi: IP internal 192.168.10.3, port sumber 9251. Setiap baris 'Exit (root) ...: Idle timeout' menandakan sesi berakhir karena tidak ada aktivitas, bukan karena logout manual. Pola berulang (berbagai port sumber) menunjukkan skrip atau alat otomatis yang membuka sesi SSH secara periodik.",
   "mitre_id": "T1078",
   "mitre_name": "Valid Accounts",
-  "mitre_desc": "Deteksi real-time SOC.",
-  "mini_drill": "Periksa /status dan log terkait.",
-  "updated_at": "22/11 22:59 WIB",
-  "log_lines": 54,
-  "ram_status": "Nominal",
-  "model": "Enterprise-Watcher",
+  "mitre_desc": "Aktivitas log menunjukkan penggunaan kredensial (kunci SSH) yang sah untuk mengakses akun root pada perangkat. Teknik ini termasuk dalam MITRE ATT&CK T1078, di mana penyerang memanfaatkan akun yang valid untuk memperoleh akses. Deteksi SOC dapat mencakup pemantauan login root via SSH, pencocokan fingerprint kunci, frekuensi login yang tidak wajar, serta korelasi dengan perubahan konfigurasi atau perintah administratif setelah login.",
+  "mini_drill": "grep 'Pubkey auth succeeded' /var/log/messages | awk '{print $1,$2,$3,$9,$11,$13}' && cat /etc/dropbear/authorized_keys && sudo dropbearkey -y -f /etc/dropbear/authorized_keys",
+  "updated_at": "22 Nov 2026 22:59 WIB",
+  "log_lines": 64,
+  "ram_status": "589 / 1679 MB (Free 1090 MB)",
+  "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 0,
@@ -35,6 +35,13 @@
       "src": "PurpleTeam-Sim",
       "title": "Simulasi Perangkat Asing (de:ad:be:ef:00:99)",
       "detail": "DHCPACK(br-lan) 192.168.10.249 de:ad:be:ef:00:99 Unknown-Device"
+    },
+    {
+      "ts": "22/11 22:59 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-22T23:59:11.192782+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/docker ps --filter name=soc-agent"
     }
   ]
 }
