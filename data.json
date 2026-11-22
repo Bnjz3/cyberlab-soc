@@ -1,14 +1,14 @@
 {
-  "threat_level": "AMAN / NORMAL",
-  "summary": "Gagal Groq API: HTTP 400: {\"error\":{\"message\":\"The model `canopylabs/orpheus-arabic-saudi` requires terms acceptance. Please have the org admin accept the terms at https://console.groq.com/playground?model=canopylabs%2Forpheus-arabic-saudi\",\"type",
-  "log_sample": "wYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:23688\n<86>Nov 22 21:43:01 Ipad dropbear[357]: Exit (root) from <192.168.10.3:23688>: Idle timeout\n<86>Nov 22 21:43:11 Ipad dropbear[6622]: Child connection from 192.168.10.3:55021\n<85>Nov 22 21:43:12 Ipad dropbear[6622]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:55021\n",
-  "forensic_analysis": "Gagal Groq API: HTTP 400: {\"error\":{\"message\":\"The model `canopylabs/orpheus-arabic-saudi` requires terms acceptance. Please have the org admin accept the terms at https://console.groq.com/playground?model=canopylabs%2Forpheus-arabic-saudi\",\"type",
+  "threat_level": "WASPADA",
+  "summary": "Router OpenWrt mencatat banyak permintaan DHCP serta serangkaian login root via SSH (dropbear) dan web UI (LuCI) dari IP internal 192.168.10.3 dan 10.10.10.3. Aktivitas login berulang dengan kunci publik menunjukkan kemungkinan penggunaan akun yang sah atau kredensial yang telah disusupi.",
+  "log_sample": "Nov 22 21:01:47 Ipad dropbear[12038]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:31476",
+  "forensic_analysis": "Timestamp menunjukkan kejadian pada malam hari (21:00-22:00 WIB). Daemon dropbear menangani koneksi SSH, sementara dispatcher.uc mencatat login LuCI. IP sumber 192.168.10.3 (dan 10.10.10.3) berulang kali berhasil otentikasi root menggunakan kunci publik, menandakan akun root aktif dan dapat diakses dari jaringan lokal. Aktivitas ini harus diverifikasi apakah memang admin yang sah atau indikasi kredensial yang dicuri.",
   "mitre_id": "T1078",
   "mitre_name": "Valid Accounts",
-  "mitre_desc": "Pemantauan autentikasi akses admin.",
-  "mini_drill": "Jalankan logread -e dropbear di EA8300.",
-  "updated_at": "22 Nov 2026 21:47 WIB",
-  "log_lines": 33,
-  "ram_status": "569 / 1679 MB (Free 1110 MB)",
-  "model": "error"
+  "mitre_desc": "Penyerang menggunakan kredensial yang sah (kunci SSH) untuk masuk sebagai root pada router. Log menunjukkan autentikasi publik key yang berhasil berulang kali, tipikal teknik Valid Accounts. SOC dapat mendeteksi pola ini dengan memantau login root yang tidak biasa, membandingkan dengan jadwal admin, dan meninjau perubahan pada file authorized_keys.",
+  "mini_drill": "Perintah: `cat /etc/dropbear/authorized_keys | grep -i \"ssh-ed25519\"` – tujuan: memeriksa kunci publik yang diizinkan untuk login root, memastikan tidak ada kunci yang tidak dikenal atau berlebih.",
+  "updated_at": "22 Nov 2026 21:58 WIB",
+  "log_lines": 38,
+  "ram_status": "560 / 1679 MB (Free 1119 MB)",
+  "model": "openai/gpt-oss-120b"
 }
