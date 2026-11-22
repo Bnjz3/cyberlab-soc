@@ -13,15 +13,8 @@
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
-  "known_macs_count": 7,
+  "known_macs_count": 8,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:26 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (117.151.25.243)",
-      "detail": "User: root/mcS5Wvf1l0 | Skor Abuse: 46% | Negara: CN | ISP: China Mobile Communications Corporation (7 laporan)"
-    },
     {
       "ts": "23/11 00:26 WIB",
       "sev": "P2-SOAR BAN",
@@ -84,6 +77,13 @@
       "src": "OpenWrt-EA8300",
       "title": "Perangkat Asing Masuk Wi-Fi (10:52:1c:ec:13:05)",
       "detail": "<30>Nov 23 02:06:26 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.63 10:52:1c:ec:13:05 ESP_EC1305"
+    },
+    {
+      "ts": "23/11 02:06 WIB",
+      "sev": "P1-NAC BARU",
+      "src": "OpenWrt-EA8300",
+      "title": "Perangkat Asing Masuk Wi-Fi (f4:cf:a2:0a:fc:e6)",
+      "detail": "<30>Nov 23 02:06:26 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.80 f4:cf:a2:0a:fc:e6 ESP_0AFCE6"
     }
   ]
 }
