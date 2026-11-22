@@ -1,8 +1,8 @@
 {
-  "threat_level": "WASPADA (P1-SIMULASI)",
-  "summary": "Uji Peringatan Real-Time",
-  "log_sample": "Notifikasi instan aktif & tersinkron ke Web Dashboard.",
-  "forensic_analysis": "Notifikasi instan aktif & tersinkron ke Web Dashboard.",
+  "threat_level": "WASPADA (P1-NAC BARU)",
+  "summary": "Simulasi Perangkat Asing (de:ad:be:ef:00:99)",
+  "log_sample": "DHCPACK(br-lan) 192.168.10.249 de:ad:be:ef:00:99 Unknown-Device",
+  "forensic_analysis": "DHCPACK(br-lan) 192.168.10.249 de:ad:be:ef:00:99 Unknown-Device",
   "mitre_id": "T1078",
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Deteksi real-time SOC.",
@@ -28,6 +28,13 @@
       "src": "Cyberlab-SOC",
       "title": "Uji Peringatan Real-Time",
       "detail": "Notifikasi instan aktif & tersinkron ke Web Dashboard."
+    },
+    {
+      "ts": "22/11 22:59 WIB",
+      "sev": "P1-NAC BARU",
+      "src": "PurpleTeam-Sim",
+      "title": "Simulasi Perangkat Asing (de:ad:be:ef:00:99)",
+      "detail": "DHCPACK(br-lan) 192.168.10.249 de:ad:be:ef:00:99 Unknown-Device"
     }
   ]
 }
