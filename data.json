@@ -7,21 +7,14 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penggunaan akun root yang sah untuk mengakses sistem melalui SSH merupakan contoh teknik Valid Accounts (T1078). Penyerang yang telah mencuri atau mengekstrak kunci privat dapat masuk tanpa memicu alarm brute‑force. SOC dapat mendeteksi dengan memantau log otentikasi (dropbear) untuk login root, membandingkan IP sumber dengan daftar perangkat yang diizinkan, dan menegakkan kebijakan penggunaan akun non‑privileged serta MFA bila memungkinkan.",
   "mini_drill": "logread -e \"dropbear\" | grep \"Pubkey auth succeeded\" | tail -n 5",
-  "updated_at": "23/11 02:06 WIB",
+  "updated_at": "23/11 02:08 WIB",
   "log_lines": 65,
   "ram_status": "631 / 1679 MB (Free 1048 MB)",
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
-  "known_macs_count": 9,
+  "known_macs_count": 10,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:27 WIB",
-      "sev": "P2-INFO",
-      "src": "OpenWrt-EA8300",
-      "title": "Login SSH Admin Terverifikasi",
-      "detail": "<85>Nov 23 00:27:24 Ipad dropbear[11464]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:32830"
-    },
     {
       "ts": "23/11 00:35 WIB",
       "sev": "P1-FIM TAMPER",
@@ -84,6 +77,13 @@
       "src": "OpenWrt-EA8300",
       "title": "Perangkat Asing Masuk Wi-Fi (28:04:7a:36:db:b5)",
       "detail": "<30>Nov 23 02:06:34 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.29 28:04:7a:36:db:b5"
+    },
+    {
+      "ts": "23/11 02:08 WIB",
+      "sev": "P1-NAC BARU",
+      "src": "OpenWrt-EA8300",
+      "title": "Perangkat Asing Masuk Wi-Fi (16:3d:cc:13:85:bf)",
+      "detail": "<30>Nov 23 02:08:13 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.6 16:3d:cc:13:85:bf iPhone-Rolan"
     }
   ]
 }
