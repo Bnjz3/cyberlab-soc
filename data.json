@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Aktivitas log menunjukkan penggunaan kredensial (kunci SSH) yang sah untuk mengakses akun root pada perangkat. Teknik ini termasuk dalam MITRE ATT&CK T1078, di mana penyerang memanfaatkan akun yang valid untuk memperoleh akses. Deteksi SOC dapat mencakup pemantauan login root via SSH, pencocokan fingerprint kunci, frekuensi login yang tidak wajar, serta korelasi dengan perubahan konfigurasi atau perintah administratif setelah login.",
   "mini_drill": "grep 'Pubkey auth succeeded' /var/log/messages | awk '{print $1,$2,$3,$9,$11,$13}' && cat /etc/dropbear/authorized_keys && sudo dropbearkey -y -f /etc/dropbear/authorized_keys",
-  "updated_at": "22/11 23:18 WIB",
+  "updated_at": "22/11 23:19 WIB",
   "log_lines": 64,
   "ram_status": "589 / 1679 MB (Free 1090 MB)",
   "model": "openai/gpt-oss-120b",
@@ -66,6 +66,13 @@
     },
     {
       "ts": "22/11 23:18 WIB",
+      "sev": "P1-FIM TAMPER",
+      "src": "VPS-Host",
+      "title": "Modifikasi File Kritis Terdeteksi!",
+      "detail": "Perubahan pada: docker-compose.yml"
+    },
+    {
+      "ts": "22/11 23:19 WIB",
       "sev": "P1-FIM TAMPER",
       "src": "VPS-Host",
       "title": "Modifikasi File Kritis Terdeteksi!",
