@@ -1,14 +1,14 @@
 {
   "threat_level": "WASPADA",
-  "summary": "Terjadi serangkaian login SSH root menggunakan kunci publik dari host 192.168.10.3 serta login web UI (LuCI) dari 10.10.10.3. Aktivitas ini berulang-ulang dalam rentang waktu beberapa jam, menandakan kemungkinan akun root telah disusupi atau ada skrip otomatis yang mengakses router.",
+  "summary": "Terdapat serangkaian login SSH dan login web LUCI ke router OpenWrt dari IP internal 192.168.10.3 menggunakan akun root dengan otentikasi kunci publik. Setiap sesi berakhir karena idle timeout, menandakan aktivitas berulang yang dapat menjadi indikasi akun root telah disusupi atau penggunaan otomatis.",
   "log_sample": "<85>Nov 22 21:12:25 Ipad dropbear[19202]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:47527",
-  "forensic_analysis": "Timestamp menunjukkan waktu lokal (WIB) saat peristiwa terjadi, misalnya 21:12:25. Daemon 'dropbear' adalah server SSH ringan pada OpenWrt; setiap baris mencatat koneksi anak, otentikasi publik, dan keluar karena idle. Alamat IP 192.168.10.3 (dengan MAC d8:fc:92:f6:6f:55) adalah sumber semua login root, menandakan satu host yang berulang mengakses router. Login via LuCI (dispatcher.uc) dari 10.10.10.3 menunjukkan akses web admin yang juga menggunakan kredensial root.",
+  "forensic_analysis": "Timestamp menunjukkan waktu lokal (WIB) saat login berhasil, misalnya 21:12:25. Daemon 'dropbear' adalah server SSH ringan pada OpenWrt, sementara 'luci' adalah antarmuka web. IP sumber 192.168.10.3 (MAC tidak tercatat di log) adalah host internal yang berulang kali melakukan otentikasi dengan kunci publik yang sama, menandakan kredensial root telah disimpan di host tersebut. Setiap sesi berakhir dengan 'Idle timeout', yang berarti tidak ada aktivitas lanjutan setelah beberapa menit.",
   "mitre_id": "T1021.004",
   "mitre_name": "Remote Services: SSH",
-  "mitre_desc": "Log menunjukkan penggunaan protokol SSH untuk mengakses sistem dengan kredensial root yang valid, cocok dengan teknik T1021.004. SOC dapat mendeteksi pola ini dengan memantau frekuensi koneksi SSH, keberhasilan otentikasi kunci publik, dan durasi sesi (idle timeout). Alert harus dihasilkan bila ada banyak sesi singkat atau login berulang dari satu sumber IP.",
-  "mini_drill": "Perintah: `logread | grep dropbear | grep 'Pubkey auth succeeded'`\\nTujuan: Menampilkan semua kejadian otentikasi SSH berbasis kunci publik, sehingga analis dapat cepat mengidentifikasi host sumber, waktu, dan frekuensi login root dalam 5 menit.",
-  "updated_at": "22 Nov 2026 22:06 WIB",
-  "log_lines": 42,
+  "mitre_desc": "Aktivitas login SSH menggunakan kunci publik yang valid merupakan contoh penggunaan layanan remote (SSH) untuk mengakses sistem. Teknik ini termasuk dalam MITRE ATT&CK Remote Services, di mana penyerang (atau pengguna sah) memanfaatkan kredensial yang sah untuk masuk. Deteksi dapat dilakukan dengan memantau log SSH untuk pola login berulang dari satu IP, penggunaan akun root, dan durasi sesi yang singkat (idle timeout).",
+  "mini_drill": "Perintah: `logread -e dropbear | grep \"Pubkey auth succeeded\"`\\nTujuan: Menampilkan semua entri log yang mencatat otentikasi kunci publik pada dropbear, sehingga analyst dapat cepat mengidentifikasi IP, user, dan fingerprint kunci yang digunakan dalam 5 menit.",
+  "updated_at": "22 Nov 2026 22:44 WIB",
+  "log_lines": 58,
   "ram_status": "577 / 1679 MB (Free 1102 MB)",
   "model": "openai/gpt-oss-120b"
 }
