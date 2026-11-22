@@ -2,73 +2,88 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CYBERLAB // SOC Operations HUD</title>
+<title>CYBERLAB // Enterprise SOC Command HUD</title>
 <style>
-:root{--bg:#060b14;--panel:#0d1626;--border:#1e3a5f;--cyan:#00f0ff;--green:#00ff88;--amber:#ffb800;--red:#ff3b5c;--text:#d8e6f3;--muted:#7a94b0}
+:root{--bg:#050912;--panel:#0b1322;--border:#1b3354;--cyan:#00f0ff;--green:#00ff88;--amber:#ffb800;--red:#ff3b5c;--text:#d8e6f3;--muted:#7a94b0}
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,monospace}
-body{background:radial-gradient(circle at top,#0d1f3a 0%,var(--bg) 65%);color:var(--text);padding:18px;line-height:1.55}
-.wrap{max-width:1100px;margin:auto}
-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;border:1px solid var(--border);background:var(--panel);padding:16px 20px;border-radius:10px;margin-bottom:18px;box-shadow:0 0 25px rgba(0,240,255,.08)}
-h1{font-size:1.25rem;color:var(--cyan);letter-spacing:1.5px}
-.badge{padding:5px 12px;border-radius:20px;font-size:.8rem;font-weight:700;background:rgba(0,255,136,.12);color:var(--green);border:1px solid var(--green)}
+body{background:radial-gradient(circle at top,#0d1f3a 0%,var(--bg) 65%);color:var(--text);padding:16px;line-height:1.5}
+.wrap{max-width:1140px;margin:auto}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;border:1px solid var(--border);background:var(--panel);padding:16px 20px;border-radius:10px;margin-bottom:16px;box-shadow:0 0 25px rgba(0,240,255,.08)}
+h1{font-size:1.2rem;color:var(--cyan);letter-spacing:1.5px}
+.badge{padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:700;background:rgba(0,255,136,.12);color:var(--green);border:1px solid var(--green)}
 .badge.warn{background:rgba(255,184,0,.15);color:var(--amber);border-color:var(--amber)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
-.card h3{font-size:.78rem;text-transform:uppercase;color:var(--muted);letter-spacing:1px;margin-bottom:6px}
-.val{font-size:1.35rem;font-weight:700;color:#fff}
-.topo{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;text-align:center}
-svg{width:100%;max-height:170px}
-.pkt{fill:var(--cyan);filter:drop-shadow(0 0 6px var(--cyan))}
-.pkt2{fill:var(--green);filter:drop-shadow(0 0 6px var(--green))}
-.sec{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px}
-.sec h2{font-size:1rem;color:var(--cyan);margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px}
-pre{background:#040810;border:1px solid #162b47;padding:12px;border-radius:8px;overflow-x:auto;color:#8be9fd;font-size:.84rem;margin:10px 0}
-.mitre{display:inline-block;background:rgba(0,240,255,.1);border:1px solid var(--cyan);color:var(--cyan);padding:4px 10px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.85rem;margin-bottom:8px}
+.badge.crit{background:rgba(255,59,92,.18);color:var(--red);border-color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+.card h3{font-size:.74rem;text-transform:uppercase;color:var(--muted);letter-spacing:1px;margin-bottom:5px}
+.val{font-size:1.2rem;font-weight:700;color:#fff}
+.sub{font-size:.75rem;color:var(--green);margin-top:4px}
+.topo,.sec{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px}
+.sec h2{font-size:.96rem;color:var(--cyan);margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px;letter-spacing:.5px}
+svg{width:100%;max-height:155px}
+.pkt{fill:var(--cyan);filter:drop-shadow(0 0 6px var(--cyan))}.pkt2{fill:var(--green);filter:drop-shadow(0 0 6px var(--green))}
+pre{background:#040810;border:1px solid #162b47;padding:11px;border-radius:8px;overflow-x:auto;color:#8be9fd;font-size:.82rem;margin:8px 0}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #152842}
+th{color:var(--muted);font-size:.75rem;text-transform:uppercase}
+.pill{padding:2px 8px;border-radius:6px;font-size:.72rem;font-weight:700}
+.p1{background:rgba(255,59,92,.2);color:var(--red)}.p2{background:rgba(255,184,0,.2);color:var(--amber)}
+.mitre{display:inline-block;background:rgba(0,240,255,.1);border:1px solid var(--cyan);color:var(--cyan);padding:4px 10px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.82rem;margin-bottom:8px}
 .drill{display:flex;gap:10px;align-items:flex-start;background:#081120;padding:12px;border-radius:8px;border:1px dashed var(--amber)}
-input[type=checkbox]{transform:scale(1.3);margin-top:4px;accent-color:var(--green)}
-footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:20px}
+input[type=checkbox]{transform:scale(1.3);margin-top:3px;accent-color:var(--green)}
+footer{text-align:center;color:var(--muted);font-size:.76rem;margin-top:16px}
 </style>
 </head>
 <body><div class="wrap">
-<header><div><h1>// CYBERLAB SOC COMMAND HUD</h1><div id="ts" style="font-size:.82rem;color:var(--muted)">Memuat telemetri terbaru...</div></div><span id="statusBadge" class="badge">SYSTEM NOMINAL</span></header>
-<div class="topo">
-<div style="font-size:.78rem;color:var(--muted);margin-bottom:6px;letter-spacing:1px">LIVE ENCRYPTED TELEMETRY PIPELINE (OPENWRT 25.12.6 &harr; WIREGUARD &harr; VPS JAKARTA)</div>
-<svg viewBox="0 0 820 150">
-  <line x1="150" y1="75" x2="410" y2="75" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="6,6"/>
-  <line x1="410" y1="75" x2="670" y2="75" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="6,6"/>
-  <circle r="5" cy="75" class="pkt"><animate attributeName="cx" from="150" to="410" dur="1.8s" repeatCount="indefinite"/></circle>
-  <circle r="5" cy="75" class="pkt2"><animate attributeName="cx" from="410" to="670" dur="1.8s" begin="0.9s" repeatCount="indefinite"/></circle>
-  <rect x="30" y="35" width="150" height="80" rx="10" fill="#091322" stroke="#00f0ff" stroke-width="2"/>
-  <text x="105" y="68" fill="#00f0ff" font-size="13" font-weight="bold" text-anchor="middle">Linksys EA8300</text>
-  <text x="105" y="88" fill="#7a94b0" font-size="11" text-anchor="middle">10.10.10.2 (LAN/WG)</text>
-  <rect x="335" y="35" width="150" height="80" rx="10" fill="#091322" stroke="#00ff88" stroke-width="2"/>
-  <text x="410" y="68" fill="#00ff88" font-size="13" font-weight="bold" text-anchor="middle">WireGuard Tunnel</text>
-  <text x="410" y="88" fill="#7a94b0" font-size="11" text-anchor="middle">UDP:51820 Encrypted</text>
-  <rect x="640" y="35" width="150" height="80" rx="10" fill="#091322" stroke="#ffb800" stroke-width="2"/>
-  <text x="715" y="68" fill="#ffb800" font-size="13" font-weight="bold" text-anchor="middle">VPS Jakarta SOC</text>
-  <text x="715" y="88" fill="#7a94b0" font-size="11" text-anchor="middle">CrowdSec + Karoun AI</text>
+<header><div><h1>// CYBERLAB ENTERPRISE SOC HUD</h1><div id="ts" style="font-size:.8rem;color:var(--muted)">Memuat telemetri...</div></div><span id="statusBadge" class="badge">AMAN / NORMAL</span></header>
+<div class="topo" style="text-align:center">
+<div style="font-size:.75rem;color:var(--muted);margin-bottom:6px;letter-spacing:1px">ZERO-TRUST ENCRYPTED TELEMETRY & ACTIVE DEFENSE PIPELINE</div>
+<svg viewBox="0 0 820 140">
+  <line x1="150" y1="70" x2="410" y2="70" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="6,6"/>
+  <line x1="410" y1="70" x2="670" y2="70" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="6,6"/>
+  <circle r="5" cy="70" class="pkt"><animate attributeName="cx" from="150" to="410" dur="1.7s" repeatCount="indefinite"/></circle>
+  <circle r="5" cy="70" class="pkt2"><animate attributeName="cx" from="410" to="670" dur="1.7s" begin="0.85s" repeatCount="indefinite"/></circle>
+  <rect x="25" y="30" width="160" height="80" rx="10" fill="#091322" stroke="#00f0ff" stroke-width="2"/>
+  <text x="105" y="63" fill="#00f0ff" font-size="13" font-weight="bold" text-anchor="middle">OpenWrt 25.12.6</text>
+  <text x="105" y="83" fill="#7a94b0" font-size="11" text-anchor="middle">EA8300 (NAC + DNS Guard)</text>
+  <rect x="330" y="30" width="160" height="80" rx="10" fill="#091322" stroke="#00ff88" stroke-width="2"/>
+  <text x="410" y="63" fill="#00ff88" font-size="13" font-weight="bold" text-anchor="middle">WireGuard Tunnel</text>
+  <text x="410" y="83" fill="#7a94b0" font-size="11" text-anchor="middle">10.10.10.2 &harr; 10.10.10.1</text>
+  <rect x="635" y="30" width="160" height="80" rx="10" fill="#091322" stroke="#ffb800" stroke-width="2"/>
+  <text x="715" y="63" fill="#ffb800" font-size="13" font-weight="bold" text-anchor="middle">VPS Enterprise SOC</text>
+  <text x="715" y="83" fill="#7a94b0" font-size="11" text-anchor="middle">FIM + CrowdSec + Karoun</text>
 </svg>
 </div>
 <div class="grid">
-  <div class="card"><h3>Total Syslog EA8300</h3><div class="val" id="logCount">-</div></div>
-  <div class="card"><h3>Kapasitas RAM VPS</h3><div class="val" id="ramInfo">-</div></div>
-  <div class="card"><h3>AI Engine Aktif</h3><div class="val" id="aiModel" style="font-size:1.05rem;color:var(--cyan)">-</div></div>
-  <div class="card"><h3>Pertahanan Perimeter</h3><div class="val" style="font-size:1.05rem;color:var(--green)">UFW + CrowdSec</div></div>
+  <div class="card"><h3>File Integrity (FIM SHA-256)</h3><div class="val" id="fimStatus">VERIFIED</div><div class="sub" id="fimSub">Baseline konfigurasi utuh</div></div>
+  <div class="card"><h3>Network Access Control (NAC)</h3><div class="val" id="nacCount">-</div><div class="sub">Perangkat Wi-Fi terverifikasi</div></div>
+  <div class="card"><h3>Telemetri & RAM VPS</h3><div class="val" id="logCount">-</div><div class="sub" id="ramInfo">-</div></div>
+  <div class="card"><h3>AI Triage & Perimeter IPS</h3><div class="val" id="aiModel" style="font-size:1rem;color:var(--cyan)">-</div><div class="sub">UFW + CrowdSec Active</div></div>
 </div>
-<div class="sec"><h2>1. RINGKASAN TELEMETRI & STATUS PERTAHANAN</h2><p id="summaryText">Menunggu sinkronisasi pertama dari @Karoun...</p></div>
-<div class="sec"><h2>2. BEDAH LOG FORENSIK HARI INI</h2><pre id="rawLog">Belum ada sampel log.</pre><p id="forensicText"></p></div>
-<div class="sec"><h2>3. KONSEP BLUE TEAM & MITRE ATT&CK</h2><a id="mitreLink" class="mitre" href="https://attack.mitre.org/" target="_blank">MITRE ATT&CK</a><p id="mitreText"></p></div>
-<div class="sec"><h2>4. MINI DRILL INVESTIGASI (5 MENIT)</h2><div class="drill"><input type="checkbox" id="drillDone"><label for="drillDone" id="drillText">Selesaikan tantangan terminal harian Anda.</label></div></div>
-<footer>Automated by Karoun AI SOC Agent &bull; Zero-Trust OpenWrt &harr; WireGuard &harr; Ubuntu VPS</footer>
+<div class="sec"><h2>LIVE SECURITY EVENT & PURPLE TEAM FEED (REAL-TIME)</h2>
+<table><thead><tr><th>Waktu</th><th>Severity</th><th>Sumber</th><th>Peristiwa & Detail</th></tr></thead><tbody id="alertRows"><tr><td colspan="4" style="color:var(--muted)">Belum ada alert tercatat.</td></tr></tbody></table></div>
+<div class="sec"><h2>1. RINGKASAN TELEMETRI & STATUS PERTAHANAN</h2><p id="summaryText">Menunggu pembaruan...</p></div>
+<div class="sec"><h2>2. BEDAH LOG FORENSIK HARI INI</h2><pre id="rawLog">-</pre><p id="forensicText"></p></div>
+<div class="sec"><h2>3. PEMETAAN MITRE ATT&CK</h2><a id="mitreLink" class="mitre" href="https://attack.mitre.org/" target="_blank">MITRE ATT&CK</a><p id="mitreText"></p></div>
+<div class="sec"><h2>4. MINI DRILL INVESTIGASI (5 MENIT)</h2><div class="drill"><input type="checkbox" id="drillDone"><label for="drillDone" id="drillText">-</label></div></div>
+<footer>Enterprise SOC Simulation (ISO 27001 FIM &bull; Zero-Trust WireGuard &bull; CrowdSec IPS &bull; Karoun AI)</footer>
 </div>
 <script>
 fetch('./data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   document.getElementById('ts').textContent='Pembaruan Terakhir: '+d.updated_at;
-  document.getElementById('logCount').textContent=d.log_lines+' baris';
+  document.getElementById('logCount').textContent=d.log_lines+' baris log';
   document.getElementById('ramInfo').textContent=d.ram_status;
   document.getElementById('aiModel').textContent=d.model;
+  document.getElementById('fimStatus').textContent=d.fim_status||'VERIFIED';
+  document.getElementById('fimSub').textContent=d.fim_detail||'Baseline SHA-256 utuh';
+  document.getElementById('nacCount').textContent=(d.known_macs_count||0)+' MAC Terdaftar';
   const b=document.getElementById('statusBadge'); b.textContent=d.threat_level||'AMAN / NORMAL';
   if((d.threat_level||'').includes('WASPADA')) b.classList.add('warn');
+  if((d.threat_level||'').includes('KRITIS')) b.classList.add('crit');
+  const rows=document.getElementById('alertRows');
+  if(d.recent_alerts&&d.recent_alerts.length){
+    rows.innerHTML=d.recent_alerts.slice().reverse().map(a=>`<tr><td>${a.ts}</td><td><span class="pill ${a.sev.startsWith('P1')?'p1':'p2'}">${a.sev}</span></td><td>${a.src}</td><td><b>${a.title}</b><br><span style="color:#7a94b0">${a.detail}</span></td></tr>`).join('');
+  }
   document.getElementById('summaryText').textContent=d.summary;
   document.getElementById('rawLog').textContent=d.log_sample;
   document.getElementById('forensicText').textContent=d.forensic_analysis;
