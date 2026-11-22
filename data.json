@@ -13,15 +13,8 @@
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
-  "known_macs_count": 5,
+  "known_macs_count": 6,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:22 WIB",
-      "sev": "P1-SIMULASI",
-      "src": "Cyberlab-SOC",
-      "title": "Uji SOAR Inline Button (185.220.101.1)",
-      "detail": "Simulasi deteksi IP publik berbahaya dengan tombol blokir 1-klik."
-    },
     {
       "ts": "23/11 00:23 WIB",
       "sev": "P1-NAC BARU",
@@ -84,6 +77,13 @@
       "src": "OpenWrt-EA8300",
       "title": "Perangkat Asing Masuk Wi-Fi (28:d0:ea:7f:04:4a)",
       "detail": "<30>Nov 23 02:06:21 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.3 28:d0:ea:7f:04:4a d33p7ake"
+    },
+    {
+      "ts": "23/11 02:06 WIB",
+      "sev": "P1-NAC BARU",
+      "src": "OpenWrt-EA8300",
+      "title": "Perangkat Asing Masuk Wi-Fi (7c:8b:c1:6b:bc:f7)",
+      "detail": "<30>Nov 23 02:06:21 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024"
     }
   ]
 }
