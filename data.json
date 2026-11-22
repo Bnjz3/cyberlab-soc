@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P2-SOAR BAN)",
+  "threat_level": "WASPADA (P1-FIM TAMPER)",
   "summary": "Pada 22 November 2026 terjadi restart layanan DNS (dnsmasq) dan https‑dns‑proxy, serta proses pembaruan banIP. Aktivitas yang paling mencolok adalah beberapa sesi SSH masuk sebagai user root dari alamat internal 192.168.10.3 menggunakan otentikasi kunci publik. Login root via SSH dari jaringan LAN dapat menandakan penggunaan kredensial yang sah atau potensi kompromi.",
   "log_sample": "<85>Nov 22 23:46:21 Ipad dropbear[17005]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:48768",
   "forensic_analysis": "Field breakdown:\n- `<85>`: PRI (facility+severity). 85 = facility 10 (security/authorization) + severity 5 (notice).\n- `Nov 22 23:46:21`: Timestamp (lokal WIB).\n- `Ipad`: Hostname perangkat OpenWrt.\n- `dropbear[17005]`: Proses daemon SSH Dropbear dengan PID 17005.\n- `Pubkey auth succeeded for 'root'`: Indikasi otentikasi kunci publik berhasil untuk akun root.\n- `ssh-ed25519 key SHA256:...`: Fingerprint kunci publik yang dipakai.\n- `from 192.168.10.3:48768`: Alamat IP sumber (client) dan port sumber. \n\nLog ini menunjukkan bahwa akun root berhasil login via SSH menggunakan kunci publik yang sudah terdaftar. Karena login berasal dari jaringan internal, hal ini dapat menjadi aktivitas administratif sah, namun juga merupakan vektor umum bagi penyerang yang telah memperoleh kredensial root. Perlu memeriksa apakah IP 192.168.10.3 adalah perangkat yang diotorisasi, serta meninjau jejak perintah yang dijalankan selama sesi tersebut.",
@@ -7,28 +7,14 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penggunaan akun root yang sah untuk mengakses sistem melalui SSH merupakan contoh teknik Valid Accounts (T1078). Penyerang yang telah mencuri atau mengekstrak kunci privat dapat masuk tanpa memicu alarm brute‑force. SOC dapat mendeteksi dengan memantau log otentikasi (dropbear) untuk login root, membandingkan IP sumber dengan daftar perangkat yang diizinkan, dan menegakkan kebijakan penggunaan akun non‑privileged serta MFA bila memungkinkan.",
   "mini_drill": "logread -e \"dropbear\" | grep \"Pubkey auth succeeded\" | tail -n 5",
-  "updated_at": "23/11 00:26 WIB",
+  "updated_at": "23/11 00:35 WIB",
   "log_lines": 65,
   "ram_status": "631 / 1679 MB (Free 1048 MB)",
   "model": "openai/gpt-oss-120b",
-  "fim_status": "VERIFIED",
-  "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
+  "fim_status": "TAMPER DETECTED",
+  "fim_detail": "Perubahan pada: soc_bot.py, docker-compose.yml",
   "known_macs_count": 3,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:08 WIB",
-      "sev": "P1-SIMULASI",
-      "src": "Cyberlab-SOC",
-      "title": "Uji SOAR Inline Button (185.220.101.1)",
-      "detail": "Simulasi deteksi IP publik berbahaya dengan tombol blokir 1-klik."
-    },
-    {
-      "ts": "23/11 00:17 WIB",
-      "sev": "P2-INFO",
-      "src": "OpenWrt-EA8300",
-      "title": "Login SSH Admin Terverifikasi",
-      "detail": "<85>Nov 23 00:17:08 Ipad dropbear[3513]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:61008"
-    },
     {
       "ts": "23/11 00:18 WIB",
       "sev": "P1-NAC BARU",
@@ -84,6 +70,20 @@
       "src": "Karoun-SOAR",
       "title": "Aksi Blokir IP (117.151.25.243)",
       "detail": "IP 117.151.25.243 diblokir 24h di firewall kernel via CrowdSec Bouncer."
+    },
+    {
+      "ts": "23/11 00:27 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 23 00:27:24 Ipad dropbear[11464]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:32830"
+    },
+    {
+      "ts": "23/11 00:35 WIB",
+      "sev": "P1-FIM TAMPER",
+      "src": "VPS-Host",
+      "title": "Modifikasi File Kritis Terdeteksi!",
+      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
     }
   ]
 }
