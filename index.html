@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CYBERLAB // SOC Operations HUD</title>
+<style>
+:root{--bg:#060b14;--panel:#0d1626;--border:#1e3a5f;--cyan:#00f0ff;--green:#00ff88;--amber:#ffb800;--red:#ff3b5c;--text:#d8e6f3;--muted:#7a94b0}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,monospace}
+body{background:radial-gradient(circle at top,#0d1f3a 0%,var(--bg) 65%);color:var(--text);padding:18px;line-height:1.55}
+.wrap{max-width:1100px;margin:auto}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;border:1px solid var(--border);background:var(--panel);padding:16px 20px;border-radius:10px;margin-bottom:18px;box-shadow:0 0 25px rgba(0,240,255,.08)}
+h1{font-size:1.25rem;color:var(--cyan);letter-spacing:1.5px}
+.badge{padding:5px 12px;border-radius:20px;font-size:.8rem;font-weight:700;background:rgba(0,255,136,.12);color:var(--green);border:1px solid var(--green)}
+.badge.warn{background:rgba(255,184,0,.15);color:var(--amber);border-color:var(--amber)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:18px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card h3{font-size:.78rem;text-transform:uppercase;color:var(--muted);letter-spacing:1px;margin-bottom:6px}
+.val{font-size:1.35rem;font-weight:700;color:#fff}
+.topo{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;text-align:center}
+svg{width:100%;max-height:170px}
+.pkt{fill:var(--cyan);filter:drop-shadow(0 0 6px var(--cyan))}
+.pkt2{fill:var(--green);filter:drop-shadow(0 0 6px var(--green))}
+.sec{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px}
+.sec h2{font-size:1rem;color:var(--cyan);margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:6px}
+pre{background:#040810;border:1px solid #162b47;padding:12px;border-radius:8px;overflow-x:auto;color:#8be9fd;font-size:.84rem;margin:10px 0}
+.mitre{display:inline-block;background:rgba(0,240,255,.1);border:1px solid var(--cyan);color:var(--cyan);padding:4px 10px;border-radius:6px;text-decoration:none;font-weight:600;font-size:.85rem;margin-bottom:8px}
+.drill{display:flex;gap:10px;align-items:flex-start;background:#081120;padding:12px;border-radius:8px;border:1px dashed var(--amber)}
+input[type=checkbox]{transform:scale(1.3);margin-top:4px;accent-color:var(--green)}
+footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:20px}
+</style>
+</head>
+<body><div class="wrap">
+<header><div><h1>// CYBERLAB SOC COMMAND HUD</h1><div id="ts" style="font-size:.82rem;color:var(--muted)">Memuat telemetri terbaru...</div></div><span id="statusBadge" class="badge">SYSTEM NOMINAL</span></header>
+<div class="topo">
+<div style="font-size:.78rem;color:var(--muted);margin-bottom:6px;letter-spacing:1px">LIVE ENCRYPTED TELEMETRY PIPELINE (OPENWRT 25.12.6 &harr; WIREGUARD &harr; VPS JAKARTA)</div>
+<svg viewBox="0 0 820 150">
+  <line x1="150" y1="75" x2="410" y2="75" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="6,6"/>
+  <line x1="410" y1="75" x2="670" y2="75" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="6,6"/>
+  <circle r="5" cy="75" class="pkt"><animate attributeName="cx" from="150" to="410" dur="1.8s" repeatCount="indefinite"/></circle>
+  <circle r="5" cy="75" class="pkt2"><animate attributeName="cx" from="410" to="670" dur="1.8s" begin="0.9s" repeatCount="indefinite"/></circle>
+  <rect x="30" y="35" width="150" height="80" rx="10" fill="#091322" stroke="#00f0ff" stroke-width="2"/>
+  <text x="105" y="68" fill="#00f0ff" font-size="13" font-weight="bold" text-anchor="middle">Linksys EA8300</text>
+  <text x="105" y="88" fill="#7a94b0" font-size="11" text-anchor="middle">10.10.10.2 (LAN/WG)</text>
+  <rect x="335" y="35" width="150" height="80" rx="10" fill="#091322" stroke="#00ff88" stroke-width="2"/>
+  <text x="410" y="68" fill="#00ff88" font-size="13" font-weight="bold" text-anchor="middle">WireGuard Tunnel</text>
+  <text x="410" y="88" fill="#7a94b0" font-size="11" text-anchor="middle">UDP:51820 Encrypted</text>
+  <rect x="640" y="35" width="150" height="80" rx="10" fill="#091322" stroke="#ffb800" stroke-width="2"/>
+  <text x="715" y="68" fill="#ffb800" font-size="13" font-weight="bold" text-anchor="middle">VPS Jakarta SOC</text>
+  <text x="715" y="88" fill="#7a94b0" font-size="11" text-anchor="middle">CrowdSec + Karoun AI</text>
+</svg>
+</div>
+<div class="grid">
+  <div class="card"><h3>Total Syslog EA8300</h3><div class="val" id="logCount">-</div></div>
+  <div class="card"><h3>Kapasitas RAM VPS</h3><div class="val" id="ramInfo">-</div></div>
+  <div class="card"><h3>AI Engine Aktif</h3><div class="val" id="aiModel" style="font-size:1.05rem;color:var(--cyan)">-</div></div>
+  <div class="card"><h3>Pertahanan Perimeter</h3><div class="val" style="font-size:1.05rem;color:var(--green)">UFW + CrowdSec</div></div>
+</div>
+<div class="sec"><h2>1. RINGKASAN TELEMETRI & STATUS PERTAHANAN</h2><p id="summaryText">Menunggu sinkronisasi pertama dari @Karoun...</p></div>
+<div class="sec"><h2>2. BEDAH LOG FORENSIK HARI INI</h2><pre id="rawLog">Belum ada sampel log.</pre><p id="forensicText"></p></div>
+<div class="sec"><h2>3. KONSEP BLUE TEAM & MITRE ATT&CK</h2><a id="mitreLink" class="mitre" href="https://attack.mitre.org/" target="_blank">MITRE ATT&CK</a><p id="mitreText"></p></div>
+<div class="sec"><h2>4. MINI DRILL INVESTIGASI (5 MENIT)</h2><div class="drill"><input type="checkbox" id="drillDone"><label for="drillDone" id="drillText">Selesaikan tantangan terminal harian Anda.</label></div></div>
+<footer>Automated by Karoun AI SOC Agent &bull; Zero-Trust OpenWrt &harr; WireGuard &harr; Ubuntu VPS</footer>
+</div>
+<script>
+fetch('./data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
+  document.getElementById('ts').textContent='Pembaruan Terakhir: '+d.updated_at;
+  document.getElementById('logCount').textContent=d.log_lines+' baris';
+  document.getElementById('ramInfo').textContent=d.ram_status;
+  document.getElementById('aiModel').textContent=d.model;
+  const b=document.getElementById('statusBadge'); b.textContent=d.threat_level||'AMAN / NORMAL';
+  if((d.threat_level||'').includes('WASPADA')) b.classList.add('warn');
+  document.getElementById('summaryText').textContent=d.summary;
+  document.getElementById('rawLog').textContent=d.log_sample;
+  document.getElementById('forensicText').textContent=d.forensic_analysis;
+  const ml=document.getElementById('mitreLink'); ml.textContent=d.mitre_id+' - '+d.mitre_name;
+  ml.href='https://attack.mitre.org/techniques/'+(d.mitre_id||'').replace('.','/')+'/';
+  document.getElementById('mitreText').textContent=d.mitre_desc;
+  document.getElementById('drillText').textContent=d.mini_drill;
+  const cb=document.getElementById('drillDone'), k='drill_'+d.updated_at;
+  cb.checked=localStorage.getItem(k)==='1'; cb.onchange=()=>localStorage.setItem(k,cb.checked?'1':'0');
+}).catch(()=>{});
+</script></body></html>
