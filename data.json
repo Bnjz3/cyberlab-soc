@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA",
+  "threat_level": "WASPADA (P1-FIM TAMPER)",
   "summary": "Log menunjukkan banyak perangkat mendapatkan lease DHCP pada jaringan LAN, diikuti oleh login LuCI dan otentikasi SSH root menggunakan kunci publik dari IP 192.168.10.3 (device d33p7ake). Aktivitas ini dapat menandakan penggunaan akun root yang sah atau penyusup yang berhasil memperoleh kredensial valid, sehingga perlu investigasi lebih lanjut.",
   "log_sample": "<86>Nov 23 13:59:06 Ipad dispatcher.uc: luci: accepted login on / for root from 192.168.10.3",
   "forensic_analysis": "Field breakdown:\n- `<86>`: PRI (facility=10, severity=6) menandakan informational message.\n- `Nov 23 13:59:06`: Timestamp (lokal WIB, UTC+7).\n- `Ipad`: hostname perangkat OpenWrt (EA8300).\n- `dispatcher.uc`: proses yang menangani request HTTP LuCI.\n- `luci: accepted login on / for root from 192.168.10.3`: pesan bahwa user 'root' berhasil login via web UI dari IP 192.168.10.3.\n\nSelanjutnya ada entri Dropbear:\n- `<85>` severity=5 (notice) menunjukkan otentikasi pubkey berhasil untuk user 'root' dengan key SHA256:... dari IP yang sama.\n- `Child connection from 192.168.10.3:34854` menandakan sesi SSH baru.\n\nKombinasi DHCPACK ke 192.168.10.3 (device d33p7ake) → login LuCI → SSH pubkey menunjukkan bahwa perangkat tersebut memperoleh akses jaringan dan kemudian menggunakan kredensial root, yang dapat menjadi indikasi kompromi atau admin yang sah.\n\nLangkah forensik: \n1. Verifikasi lease DHCP di /tmp/dhcp.leases untuk memastikan MAC address 28:d0:ea:7f:04:4a milik device d33p7ake.\n2. Periksa file authorized_keys Dropbear (/etc/dropbear/authorized_keys) untuk memastikan key SHA256 tersebut terdaftar secara sah.\n3. Audit log /var/log/auth.log atau /var/log/dropbear.log untuk sesi tambahan.\n4. Bandingkan MAC address dengan inventaris perangkat.\n5. Jika tidak sah, revokasi key dan rotasi password root, serta blokir MAC/IP di firewall.",
@@ -7,12 +7,12 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
   "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
-  "updated_at": "23 Nov 2026 15:52 WIB",
+  "updated_at": "23/11 16:18 WIB",
   "log_lines": 234,
   "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
-  "fim_status": "VERIFIED",
-  "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
+  "fim_status": "TAMPER DETECTED",
+  "fim_detail": "Perubahan pada: soc_bot.py",
   "known_macs_count": 12,
   "cti_count": 1,
   "banned_ips": [
@@ -23,55 +23,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "23/11 12:54 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (103.158.95.69)",
-      "detail": "User: support/support | Skor Abuse: 9% | Negara: IN | ISP: Om Computer World (2 laporan)"
-    },
-    {
-      "ts": "23/11 14:37 WIB",
-      "sev": "P1-NAC BARU",
-      "src": "OpenWrt-EA8300",
-      "title": "Perangkat Asing Masuk Wi-Fi (78:93:c3:c8:e1:3a)",
-      "detail": "<30>Nov 23 14:37:50 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.40 78:93:c3:c8:e1:3a"
-    },
-    {
-      "ts": "23/11 15:38 WIB",
-      "sev": "P2-INFO",
-      "src": "VPS-Jakarta",
-      "title": "Eksekusi Perintah Root (sudo)",
-      "detail": "2026-11-23T16:38:10.977084+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/home/ubuntu ; USER=root ; COMMAND=/usr/bin/tee /etc/sysctl.d/99-soc-hardening.conf"
-    },
-    {
-      "ts": "23/11 15:42 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
-    {
-      "ts": "23/11 15:44 WIB",
-      "sev": "P2-INFO",
-      "src": "VPS-Jakarta",
-      "title": "Eksekusi Perintah Root (sudo)",
-      "detail": "2026-11-23T16:43:59.878378+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/docker logs --tail 5 soc-agent"
-    },
-    {
-      "ts": "23/11 15:44 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
-    },
-    {
-      "ts": "23/11 15:46 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
-    },
     {
       "ts": "23/11 15:47 WIB",
       "sev": "P1-FIM TAMPER",
@@ -106,6 +57,55 @@
       "src": "Karoun-SOAR",
       "title": "Manual Ban IP (35.210.141.155)",
       "detail": "IP 35.210.141.155 diblokir 24h di VPS & ditambahkan ke CTI Feed OpenWrt."
+    },
+    {
+      "ts": "23/11 15:56 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-23T16:56:43.778566+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab/web ; USER=root ; COMMAND=/usr/bin/docker exec cowrie-honeypot python3 -c 'import os; os.makedirs(\"/cowrie/cowrie-git/honeyfs/root\", exist_ok=True); o"
+    },
+    {
+      "ts": "23/11 15:58 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 23 15:58:38 Ipad dropbear[18556]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:61547"
+    },
+    {
+      "ts": "23/11 16:07 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-23T17:07:04.278976+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab/web ; USER=root ; COMMAND=/usr/bin/docker exec crowdsec-soc cscli console enroll cmwt0kriy000202l9koe3kzo4"
+    },
+    {
+      "ts": "23/11 16:09 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 23 16:08:54 Ipad dropbear[24681]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:1722"
+    },
+    {
+      "ts": "23/11 16:17 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-23T17:17:24.259767+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/python3 -c '#012p = \"soc-agent/soc_bot.py\"#012s = open(p, encoding=\"utf-8\").read()#012old = \"ThreadingTCPServer((\\\\\"10."
+    },
+    {
+      "ts": "23/11 16:17 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 23 16:17:58 Ipad dropbear[30157]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:54822"
+    },
+    {
+      "ts": "23/11 16:18 WIB",
+      "sev": "P1-FIM TAMPER",
+      "src": "VPS-Host",
+      "title": "Modifikasi File Kritis Terdeteksi!",
+      "detail": "Perubahan pada: soc_bot.py"
     }
   ]
 }
