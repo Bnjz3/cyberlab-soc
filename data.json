@@ -1,5 +1,5 @@
 {
-  "threat_level": "AMAN / NORMAL",
+  "threat_level": "WASPADA (P1-HONEYPOT)",
   "summary": "Log menunjukkan proses normal boot interface LAN, link up, dan serangkaian transaksi DHCP (DISCOVER, OFFER, REQUEST, ACK) antara router OpenWrt dan perangkat klien. Tidak ada indikasi kegagalan, konflik IP, atau MAC address yang mencurigakan. Aktivitas ini konsisten dengan operasi jaringan rumah/office yang sehat.",
   "log_sample": "<30>Nov 23 02:06:21 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024",
   "forensic_analysis": "Field‑by‑field:\n- `<30>`: PRI (facility=3=daemon, severity=6=informational). Menandakan pesan informatif dari daemon.\n- `Nov 23 02:06:21`: Timestamp lokal (WIB) – penting untuk korelasi waktu.\n- `Ipad`: Hostname router (OpenWrt EA8300) yang menghasilkan log.\n- `dnsmasq-dhcp[1]`: Proses dnsmasq (PID 1) yang menangani DHCP server.\n- `DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024`: \n  * `DHCPACK` = server mengkonfirmasi lease.\n  * `(br-lan)` = nama bridge LAN.\n  * `192.168.10.4` = IP yang diberikan.\n  * `7c:8b:c1:6b:bc:f7` = MAC address klien.\n  * `PUBLIC2024` = hostname klien (biasanya perangkat pengguna).\n\nSeluruh rangkaian log mencakup: \n1. **Link up** (kernel, netifd) – menandakan port LAN aktif.\n2. **DHCPDISCOVER → DHCPOFFER → DHCPREQUEST → DHCPACK** – siklus standar alokasi IP.\n3. **Abandoning lease** – terjadi ketika lease lama dilepaskan karena MAC baru mengambil IP yang sama; ini normal pada pergantian perangkat.\nTidak ada pesan error (e.g., `DHCPNAK`, `duplicate IP`, atau `unauthorized MAC`).",
@@ -7,7 +7,7 @@
   "mitre_name": "System Network Configuration Discovery: IP Addresses",
   "mitre_desc": "Setiap kali perangkat meminta atau menerima lease DHCP, server mencatat IP‑MAC mapping yang dapat dipakai penyerang untuk memetakan jaringan. Teknik ini termasuk dalam T1016.001 karena mengungkapkan alamat IP yang aktif. SOC dapat mendeteksi penyalahgunaan dengan memantau anomali pada pola DHCP (mis. lonjakan DISCOVER, MAC tidak dikenal, lease churn tinggi) dan mengkorelasi dengan asset inventory.",
   "mini_drill": "cat /tmp/dhcp.leases && logread | grep 'DHCPACK'   # Tampilkan lease aktif dan filter log DHCPACK selama 5 menit untuk mengidentifikasi perangkat baru.",
-  "updated_at": "23 Nov 2026 07:00 WIB",
+  "updated_at": "23/11 08:08 WIB",
   "log_lines": 194,
   "ram_status": "654 / 1679 MB (Free 1025 MB)",
   "model": "openai/gpt-oss-120b",
@@ -15,13 +15,6 @@
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 11,
   "recent_alerts": [
-    {
-      "ts": "23/11 00:36 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
-    },
     {
       "ts": "23/11 00:38 WIB",
       "sev": "P1-FIM TAMPER",
@@ -84,6 +77,13 @@
       "src": "OpenWrt-EA8300",
       "title": "Perangkat Asing Masuk Wi-Fi (98:b0:8b:67:85:c0)",
       "detail": "<30>Nov 23 04:03:03 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.8 98:b0:8b:67:85:c0 Samsung-A73-5G"
+    },
+    {
+      "ts": "23/11 08:08 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (223.109.52.26)",
+      "detail": "User: root/------fuck------ | Skor Abuse: 100% | Negara: CN | ISP: China Mobile Communications Corporation (94 laporan)"
     }
   ]
 }
