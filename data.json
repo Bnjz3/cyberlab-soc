@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-FIM TAMPER)",
+  "threat_level": "WASPADA (P1-SIMULASI)",
   "summary": "Log menunjukkan proses normal boot interface LAN, link up, dan serangkaian transaksi DHCP (DISCOVER, OFFER, REQUEST, ACK) antara router OpenWrt dan perangkat klien. Tidak ada indikasi kegagalan, konflik IP, atau MAC address yang mencurigakan. Aktivitas ini konsisten dengan operasi jaringan rumah/office yang sehat.",
   "log_sample": "<30>Nov 23 02:06:21 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024",
   "forensic_analysis": "Field‑by‑field:\n- `<30>`: PRI (facility=3=daemon, severity=6=informational). Menandakan pesan informatif dari daemon.\n- `Nov 23 02:06:21`: Timestamp lokal (WIB) – penting untuk korelasi waktu.\n- `Ipad`: Hostname router (OpenWrt EA8300) yang menghasilkan log.\n- `dnsmasq-dhcp[1]`: Proses dnsmasq (PID 1) yang menangani DHCP server.\n- `DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024`: \n  * `DHCPACK` = server mengkonfirmasi lease.\n  * `(br-lan)` = nama bridge LAN.\n  * `192.168.10.4` = IP yang diberikan.\n  * `7c:8b:c1:6b:bc:f7` = MAC address klien.\n  * `PUBLIC2024` = hostname klien (biasanya perangkat pengguna).\n\nSeluruh rangkaian log mencakup: \n1. **Link up** (kernel, netifd) – menandakan port LAN aktif.\n2. **DHCPDISCOVER → DHCPOFFER → DHCPREQUEST → DHCPACK** – siklus standar alokasi IP.\n3. **Abandoning lease** – terjadi ketika lease lama dilepaskan karena MAC baru mengambil IP yang sama; ini normal pada pergantian perangkat.\nTidak ada pesan error (e.g., `DHCPNAK`, `duplicate IP`, atau `unauthorized MAC`).",
@@ -11,24 +11,10 @@
   "log_lines": 194,
   "ram_status": "654 / 1679 MB (Free 1025 MB)",
   "model": "openai/gpt-oss-120b",
-  "fim_status": "TAMPER DETECTED",
-  "fim_detail": "Perubahan pada: soc_bot.py, docker-compose.yml",
+  "fim_status": "VERIFIED",
+  "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 12,
   "recent_alerts": [
-    {
-      "ts": "23/11 04:03 WIB",
-      "sev": "P1-NAC BARU",
-      "src": "OpenWrt-EA8300",
-      "title": "Perangkat Asing Masuk Wi-Fi (98:b0:8b:67:85:c0)",
-      "detail": "<30>Nov 23 04:03:03 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.8 98:b0:8b:67:85:c0 Samsung-A73-5G"
-    },
-    {
-      "ts": "23/11 08:08 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (223.109.52.26)",
-      "detail": "User: root/------fuck------ | Skor Abuse: 100% | Negara: CN | ISP: China Mobile Communications Corporation (94 laporan)"
-    },
     {
       "ts": "23/11 08:08 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -98,6 +84,20 @@
       "src": "VPS-Host",
       "title": "Modifikasi File Kritis Terdeteksi!",
       "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
+    },
+    {
+      "ts": "23/11 15:48 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 23 15:48:22 Ipad dropbear[12218]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:34854"
+    },
+    {
+      "ts": "23/11 15:48 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji SOAR + Shodan Intel (185.220.101.1)",
+      "detail": "Abuse: 100% (DE, Artikel10 e.V.) | Shodan Ports: [80,443,9001,9002] | CVEs: 0"
     }
   ],
   "cti_count": 0,
