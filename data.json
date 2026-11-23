@@ -1,19 +1,27 @@
 {
-  "threat_level": "WASPADA (P2-SOAR BAN)",
-  "summary": "Log menunjukkan proses normal boot interface LAN, link up, dan serangkaian transaksi DHCP (DISCOVER, OFFER, REQUEST, ACK) antara router OpenWrt dan perangkat klien. Tidak ada indikasi kegagalan, konflik IP, atau MAC address yang mencurigakan. Aktivitas ini konsisten dengan operasi jaringan rumah/office yang sehat.",
-  "log_sample": "<30>Nov 23 02:06:21 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024",
-  "forensic_analysis": "Field‑by‑field:\n- `<30>`: PRI (facility=3=daemon, severity=6=informational). Menandakan pesan informatif dari daemon.\n- `Nov 23 02:06:21`: Timestamp lokal (WIB) – penting untuk korelasi waktu.\n- `Ipad`: Hostname router (OpenWrt EA8300) yang menghasilkan log.\n- `dnsmasq-dhcp[1]`: Proses dnsmasq (PID 1) yang menangani DHCP server.\n- `DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024`: \n  * `DHCPACK` = server mengkonfirmasi lease.\n  * `(br-lan)` = nama bridge LAN.\n  * `192.168.10.4` = IP yang diberikan.\n  * `7c:8b:c1:6b:bc:f7` = MAC address klien.\n  * `PUBLIC2024` = hostname klien (biasanya perangkat pengguna).\n\nSeluruh rangkaian log mencakup: \n1. **Link up** (kernel, netifd) – menandakan port LAN aktif.\n2. **DHCPDISCOVER → DHCPOFFER → DHCPREQUEST → DHCPACK** – siklus standar alokasi IP.\n3. **Abandoning lease** – terjadi ketika lease lama dilepaskan karena MAC baru mengambil IP yang sama; ini normal pada pergantian perangkat.\nTidak ada pesan error (e.g., `DHCPNAK`, `duplicate IP`, atau `unauthorized MAC`).",
-  "mitre_id": "T1016.001",
-  "mitre_name": "System Network Configuration Discovery: IP Addresses",
-  "mitre_desc": "Setiap kali perangkat meminta atau menerima lease DHCP, server mencatat IP‑MAC mapping yang dapat dipakai penyerang untuk memetakan jaringan. Teknik ini termasuk dalam T1016.001 karena mengungkapkan alamat IP yang aktif. SOC dapat mendeteksi penyalahgunaan dengan memantau anomali pada pola DHCP (mis. lonjakan DISCOVER, MAC tidak dikenal, lease churn tinggi) dan mengkorelasi dengan asset inventory.",
-  "mini_drill": "cat /tmp/dhcp.leases && logread | grep 'DHCPACK'   # Tampilkan lease aktif dan filter log DHCPACK selama 5 menit untuk mengidentifikasi perangkat baru.",
-  "updated_at": "23/11 15:49 WIB",
-  "log_lines": 194,
-  "ram_status": "654 / 1679 MB (Free 1025 MB)",
+  "threat_level": "WASPADA",
+  "summary": "Log menunjukkan banyak perangkat mendapatkan lease DHCP pada jaringan LAN, diikuti oleh login LuCI dan otentikasi SSH root menggunakan kunci publik dari IP 192.168.10.3 (device d33p7ake). Aktivitas ini dapat menandakan penggunaan akun root yang sah atau penyusup yang berhasil memperoleh kredensial valid, sehingga perlu investigasi lebih lanjut.",
+  "log_sample": "<86>Nov 23 13:59:06 Ipad dispatcher.uc: luci: accepted login on / for root from 192.168.10.3",
+  "forensic_analysis": "Field breakdown:\n- `<86>`: PRI (facility=10, severity=6) menandakan informational message.\n- `Nov 23 13:59:06`: Timestamp (lokal WIB, UTC+7).\n- `Ipad`: hostname perangkat OpenWrt (EA8300).\n- `dispatcher.uc`: proses yang menangani request HTTP LuCI.\n- `luci: accepted login on / for root from 192.168.10.3`: pesan bahwa user 'root' berhasil login via web UI dari IP 192.168.10.3.\n\nSelanjutnya ada entri Dropbear:\n- `<85>` severity=5 (notice) menunjukkan otentikasi pubkey berhasil untuk user 'root' dengan key SHA256:... dari IP yang sama.\n- `Child connection from 192.168.10.3:34854` menandakan sesi SSH baru.\n\nKombinasi DHCPACK ke 192.168.10.3 (device d33p7ake) → login LuCI → SSH pubkey menunjukkan bahwa perangkat tersebut memperoleh akses jaringan dan kemudian menggunakan kredensial root, yang dapat menjadi indikasi kompromi atau admin yang sah.\n\nLangkah forensik: \n1. Verifikasi lease DHCP di /tmp/dhcp.leases untuk memastikan MAC address 28:d0:ea:7f:04:4a milik device d33p7ake.\n2. Periksa file authorized_keys Dropbear (/etc/dropbear/authorized_keys) untuk memastikan key SHA256 tersebut terdaftar secara sah.\n3. Audit log /var/log/auth.log atau /var/log/dropbear.log untuk sesi tambahan.\n4. Bandingkan MAC address dengan inventaris perangkat.\n5. Jika tidak sah, revokasi key dan rotasi password root, serta blokir MAC/IP di firewall.",
+  "mitre_id": "T1078",
+  "mitre_name": "Valid Accounts",
+  "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
+  "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
+  "updated_at": "23 Nov 2026 15:52 WIB",
+  "log_lines": 234,
+  "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 12,
+  "cti_count": 1,
+  "banned_ips": [
+    {
+      "ip": "35.210.141.155",
+      "reason": "karoun/soar-manual-ban",
+      "ts": "23/11 15:49 WIB"
+    }
+  ],
   "recent_alerts": [
     {
       "ts": "23/11 12:54 WIB",
@@ -98,14 +106,6 @@
       "src": "Karoun-SOAR",
       "title": "Manual Ban IP (35.210.141.155)",
       "detail": "IP 35.210.141.155 diblokir 24h di VPS & ditambahkan ke CTI Feed OpenWrt."
-    }
-  ],
-  "cti_count": 1,
-  "banned_ips": [
-    {
-      "ip": "35.210.141.155",
-      "reason": "karoun/soar-manual-ban",
-      "ts": "23/11 15:49 WIB"
     }
   ]
 }
