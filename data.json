@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
   "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
-  "updated_at": "23/11 23:59 WIB",
+  "updated_at": "24/11 00:00 WIB",
   "log_lines": 234,
   "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
@@ -33,84 +33,84 @@
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: cuixuecheng/123456 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: admin2/admin2 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
       "ts": "23/11 23:59 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: codex/123456 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: deploy/admin123 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
       "ts": "23/11 23:59 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/Pass@word | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: su/123 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
       "ts": "23/11 23:59 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: bt/bt123456 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: steam/12345 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: linaro/linaro | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: bob/12345 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: dev/1 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: test/123 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: ubuntu/lol123 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: deployer/p@ssw0rd | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: ubuntu/QAZwsxedc123 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: root/Yanchang@2021 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: wuyiwen/yulinfeng | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: admin/Admin@2022 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: lixiang/lixiang | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: develop/12345678 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: sunrise/root | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: Tronlong/administrator | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
-      "ts": "23/11 23:59 WIB",
+      "ts": "24/11 00:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: user1/root@123 | Abuse: 0% (SG, DigitalOcean, LLC)"
+      "detail": "User: root/!@#$%^ | Abuse: 0% (SG, DigitalOcean, LLC)"
     }
   ]
 }
