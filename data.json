@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
   "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
-  "updated_at": "23/11 22:47 WIB",
+  "updated_at": "23/11 23:24 WIB",
   "log_lines": 234,
   "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
@@ -23,13 +23,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "23/11 16:20 WIB",
-      "sev": "P1-SIMULASI",
-      "src": "Cyberlab-SOC",
-      "title": "Uji SOAR + Shodan Intel (185.220.101.1)",
-      "detail": "Abuse: 100% (DE, Artikel10 e.V.) | Shodan Ports: [80,443,9001,9002] | CVEs: 0"
-    },
     {
       "ts": "23/11 16:28 WIB",
       "sev": "P2-INFO",
@@ -106,6 +99,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (35.214.242.121)",
       "detail": "User: admin/admin | Abuse: 100% (NL, Google LLC)"
+    },
+    {
+      "ts": "23/11 23:24 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: root/invalid_probe_9x8y7z | Abuse: 0% (SG, DigitalOcean, LLC)"
     }
   ]
 }
