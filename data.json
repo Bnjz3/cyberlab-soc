@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-HONEYPOT)",
+  "threat_level": "WASPADA (P1-HONEYPOT CMD)",
   "summary": "Log menunjukkan banyak perangkat mendapatkan lease DHCP pada jaringan LAN, diikuti oleh login LuCI dan otentikasi SSH root menggunakan kunci publik dari IP 192.168.10.3 (device d33p7ake). Aktivitas ini dapat menandakan penggunaan akun root yang sah atau penyusup yang berhasil memperoleh kredensial valid, sehingga perlu investigasi lebih lanjut.",
   "log_sample": "<86>Nov 23 13:59:06 Ipad dispatcher.uc: luci: accepted login on / for root from 192.168.10.3",
   "forensic_analysis": "Field breakdown:\n- `<86>`: PRI (facility=10, severity=6) menandakan informational message.\n- `Nov 23 13:59:06`: Timestamp (lokal WIB, UTC+7).\n- `Ipad`: hostname perangkat OpenWrt (EA8300).\n- `dispatcher.uc`: proses yang menangani request HTTP LuCI.\n- `luci: accepted login on / for root from 192.168.10.3`: pesan bahwa user 'root' berhasil login via web UI dari IP 192.168.10.3.\n\nSelanjutnya ada entri Dropbear:\n- `<85>` severity=5 (notice) menunjukkan otentikasi pubkey berhasil untuk user 'root' dengan key SHA256:... dari IP yang sama.\n- `Child connection from 192.168.10.3:34854` menandakan sesi SSH baru.\n\nKombinasi DHCPACK ke 192.168.10.3 (device d33p7ake) → login LuCI → SSH pubkey menunjukkan bahwa perangkat tersebut memperoleh akses jaringan dan kemudian menggunakan kredensial root, yang dapat menjadi indikasi kompromi atau admin yang sah.\n\nLangkah forensik: \n1. Verifikasi lease DHCP di /tmp/dhcp.leases untuk memastikan MAC address 28:d0:ea:7f:04:4a milik device d33p7ake.\n2. Periksa file authorized_keys Dropbear (/etc/dropbear/authorized_keys) untuk memastikan key SHA256 tersebut terdaftar secara sah.\n3. Audit log /var/log/auth.log atau /var/log/dropbear.log untuk sesi tambahan.\n4. Bandingkan MAC address dengan inventaris perangkat.\n5. Jika tidak sah, revokasi key dan rotasi password root, serta blokir MAC/IP di firewall.",
@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
   "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
-  "updated_at": "24/11 00:00 WIB",
+  "updated_at": "24/11 00:01 WIB",
   "log_lines": 234,
   "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
@@ -33,69 +33,6 @@
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/123QWEqwe | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/password!23 | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/banana | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: rock/radxa | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/1234abcd | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/1500 | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/Root@1234 | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: root/Server01 | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
-      "detail": "User: eva/eva | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 00:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
       "detail": "User: Tronlong/1111111111 | Abuse: 0% (SG, DigitalOcean, LLC)"
     },
     {
@@ -111,6 +48,69 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
       "detail": "User: pi/password1 | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:00 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: root/12345 | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:00 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: Tronlong/passwOrd | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:00 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: sikim/sikim | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:00 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: devops/admin | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:00 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: maud/maud | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:01 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: claude/123456 | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:01 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: user/!QAZ2wsx | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:01 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: root/123456789* | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "24/11 00:01 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (146.190.93.118)",
+      "detail": "CMD: uname -s -v -n -r -m | Abuse: 0% (SG, DigitalOcean, LLC)"
     }
   ]
 }
