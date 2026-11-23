@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-FIM TAMPER)",
+  "threat_level": "WASPADA (P1-SIMULASI)",
   "summary": "Log menunjukkan banyak perangkat mendapatkan lease DHCP pada jaringan LAN, diikuti oleh login LuCI dan otentikasi SSH root menggunakan kunci publik dari IP 192.168.10.3 (device d33p7ake). Aktivitas ini dapat menandakan penggunaan akun root yang sah atau penyusup yang berhasil memperoleh kredensial valid, sehingga perlu investigasi lebih lanjut.",
   "log_sample": "<86>Nov 23 13:59:06 Ipad dispatcher.uc: luci: accepted login on / for root from 192.168.10.3",
   "forensic_analysis": "Field breakdown:\n- `<86>`: PRI (facility=10, severity=6) menandakan informational message.\n- `Nov 23 13:59:06`: Timestamp (lokal WIB, UTC+7).\n- `Ipad`: hostname perangkat OpenWrt (EA8300).\n- `dispatcher.uc`: proses yang menangani request HTTP LuCI.\n- `luci: accepted login on / for root from 192.168.10.3`: pesan bahwa user 'root' berhasil login via web UI dari IP 192.168.10.3.\n\nSelanjutnya ada entri Dropbear:\n- `<85>` severity=5 (notice) menunjukkan otentikasi pubkey berhasil untuk user 'root' dengan key SHA256:... dari IP yang sama.\n- `Child connection from 192.168.10.3:34854` menandakan sesi SSH baru.\n\nKombinasi DHCPACK ke 192.168.10.3 (device d33p7ake) → login LuCI → SSH pubkey menunjukkan bahwa perangkat tersebut memperoleh akses jaringan dan kemudian menggunakan kredensial root, yang dapat menjadi indikasi kompromi atau admin yang sah.\n\nLangkah forensik: \n1. Verifikasi lease DHCP di /tmp/dhcp.leases untuk memastikan MAC address 28:d0:ea:7f:04:4a milik device d33p7ake.\n2. Periksa file authorized_keys Dropbear (/etc/dropbear/authorized_keys) untuk memastikan key SHA256 tersebut terdaftar secara sah.\n3. Audit log /var/log/auth.log atau /var/log/dropbear.log untuk sesi tambahan.\n4. Bandingkan MAC address dengan inventaris perangkat.\n5. Jika tidak sah, revokasi key dan rotasi password root, serta blokir MAC/IP di firewall.",
@@ -7,12 +7,12 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
   "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
-  "updated_at": "23/11 16:18 WIB",
+  "updated_at": "23/11 16:20 WIB",
   "log_lines": 234,
   "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
-  "fim_status": "TAMPER DETECTED",
-  "fim_detail": "Perubahan pada: soc_bot.py",
+  "fim_status": "VERIFIED",
+  "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
   "known_macs_count": 12,
   "cti_count": 1,
   "banned_ips": [
@@ -23,13 +23,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "23/11 15:47 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py, docker-compose.yml"
-    },
     {
       "ts": "23/11 15:48 WIB",
       "sev": "P1-FIM TAMPER",
@@ -106,6 +99,13 @@
       "src": "VPS-Host",
       "title": "Modifikasi File Kritis Terdeteksi!",
       "detail": "Perubahan pada: soc_bot.py"
+    },
+    {
+      "ts": "23/11 16:20 WIB",
+      "sev": "P1-SIMULASI",
+      "src": "Cyberlab-SOC",
+      "title": "Uji SOAR + Shodan Intel (185.220.101.1)",
+      "detail": "Abuse: 100% (DE, Artikel10 e.V.) | Shodan Ports: [80,443,9001,9002] | CVEs: 0"
     }
   ]
 }
