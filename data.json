@@ -24,13 +24,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "23/11 16:29 WIB",
-      "sev": "P2-INFO",
-      "src": "OpenWrt-EA8300",
-      "title": "Login SSH Admin Terverifikasi",
-      "detail": "<85>Nov 23 16:29:26 Ipad dropbear[5155]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:10719"
-    },
-    {
       "ts": "23/11 16:39 WIB",
       "sev": "P2-INFO",
       "src": "OpenWrt-EA8300",
@@ -106,6 +99,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (146.190.93.118)",
       "detail": "User: root/invalid_probe_9x8y7z | Abuse: 0% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "23/11 23:48 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (146.190.93.118)",
+      "detail": "User: root/admin1xjw440 | Abuse: 0% (SG, DigitalOcean, LLC)"
     }
   ]
 }
