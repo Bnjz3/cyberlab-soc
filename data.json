@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial root yang valid (kunci SSH) untuk mengakses router setelah memperoleh alamat IP melalui DHCP. Deteksi dapat dilakukan dengan memantau login admin via LuCI dan SSH, mencocokkan MAC address dengan inventaris, serta meninjau perubahan pada file authorized_keys. Alert pada login root dari IP yang baru saja menerima lease DHCP merupakan indikator potensial.",
   "mini_drill": "cat /etc/dropbear/authorized_keys   # Tampilkan kunci SSH yang diizinkan, kemudian gunakan 'dropbearkey -y -f /etc/dropbear/authorized_keys' untuk memverifikasi fingerprint dan hapus kunci yang tidak dikenal.",
-  "updated_at": "23/11 21:05 WIB",
+  "updated_at": "23/11 22:47 WIB",
   "log_lines": 234,
   "ram_status": "663 / 1679 MB (Free 1016 MB)",
   "model": "openai/gpt-oss-120b",
@@ -23,20 +23,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "23/11 16:17 WIB",
-      "sev": "P2-INFO",
-      "src": "OpenWrt-EA8300",
-      "title": "Login SSH Admin Terverifikasi",
-      "detail": "<85>Nov 23 16:17:58 Ipad dropbear[30157]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:54822"
-    },
-    {
-      "ts": "23/11 16:18 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
     {
       "ts": "23/11 16:20 WIB",
       "sev": "P1-SIMULASI",
@@ -106,6 +92,20 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (176.53.159.197)",
       "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22,8080] | CVEs: 0"
+    },
+    {
+      "ts": "23/11 21:05 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (176.53.159.198)",
+      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [8080] | CVEs: 0"
+    },
+    {
+      "ts": "23/11 22:47 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (35.214.242.121)",
+      "detail": "User: admin/admin | Abuse: 100% (NL, Google LLC)"
     }
   ]
 }
