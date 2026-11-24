@@ -7,7 +7,7 @@
   "mitre_name": "Brute Force",
   "mitre_desc": "Log menunjukkan percobaan koneksi SSH yang berulang dan pemutusan sebelum otentikasi, serta login root yang berulang dari satu IP. Kedua pola ini cocok dengan teknik Brute Force (T1110) dimana penyerang mencoba banyak kredensial untuk memperoleh akses. Deteksi SOC dapat dilakukan dengan memantau log otentikasi (luci, dropbear), mengidentifikasi banyak percobaan login dalam rentang waktu singkat, dan mengkorelasikannya dengan pemblokiran otomatis oleh sistem seperti banIP.",
   "mini_drill": "Gunakan perintah berikut untuk mengidentifikasi semua percobaan login root dalam 5 menit terakhir dan menampilkan IP yang terblokir:\n```\nlogread | grep -E \"luci: accepted login|dropbear\" | tail -n 50\nnft list set inet banIP blocklist\n```\nLangkah: 1) Jalankan perintah pertama, catat IP yang muncul berulang. 2) Jalankan perintah kedua untuk memastikan IP tersebut berada di blocklist. 3) Jika ada IP yang tidak terblokir namun mencurigakan, tambahkan manual dengan `nft add element inet banIP blocklist { <ip> }`.",
-  "updated_at": "24/11 12:05 WIB",
+  "updated_at": "24/11 14:04 WIB",
   "log_lines": 463,
   "ram_status": "758 / 1679 MB (Free 921 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,20 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "24/11 04:17 WIB",
-      "sev": "P1-HONEYPOT CMD",
-      "src": "Cowrie-Trap",
-      "title": "Perintah Penyerang (146.190.93.118)",
-      "detail": "CMD: uname -s -v -n -r -m | Abuse: 0% (SG, DigitalOcean, LLC)"
-    },
-    {
-      "ts": "24/11 05:16 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
-      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
-    },
     {
       "ts": "24/11 06:20 WIB",
       "sev": "P1-HONEYPOT",
@@ -107,6 +93,20 @@
     },
     {
       "ts": "24/11 12:05 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
+      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "24/11 12:51 WIB",
+      "sev": "P2-INFO",
+      "src": "OpenWrt-EA8300",
+      "title": "Login SSH Admin Terverifikasi",
+      "detail": "<85>Nov 24 12:51:05 Ipad dropbear[17550]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:56774"
+    },
+    {
+      "ts": "24/11 14:04 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (176.53.159.196)",
