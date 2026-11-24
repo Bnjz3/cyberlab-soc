@@ -29,13 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "24/11 17:03 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (102.220.160.47)",
-      "detail": "User: root/abc123%^& | Abuse: 100% (SI, Internet) | Shodan Ports: [443,902,953,1080,1103,1111,1290,1337] | CVEs: 0"
-    },
-    {
       "ts": "24/11 17:17 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (102.220.161.173)",
       "detail": "User: project/1234 | Abuse: 100% (SI, Internet) | Shodan Ports: [22,443,993,1023,1080,1738,1926,1965] | CVEs: 0"
+    },
+    {
+      "ts": "24/11 19:21 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
+      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
