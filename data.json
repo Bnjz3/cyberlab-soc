@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial sah (kunci SSH) untuk masuk sebagai root. SOC dapat mendeteksi dengan memantau log otentikasi SSH (dropbear), mencari login root dari alamat IP yang tidak biasa, memeriksa fingerprint kunci yang baru muncul, dan mengkorelasi dengan perubahan konfigurasi atau eksekusi perintah setelah login.",
   "mini_drill": "Gunakan perintah berikut untuk mengaudit sesi SSH root dalam 5 menit:\n```bash\n# Tampilkan 20 entri terakhir login root via dropbear\ngrep \"Pubkey auth succeeded for 'root'\" /var/log/syslog | tail -n 20\n\n# Cek fingerprint kunci yang baru muncul\nawk -F\"'\" '/Pubkey auth succeeded/ {print $4}' /var/log/syslog | sort | uniq -c\n\n# Tampilkan proses dropbear yang masih aktif\nps | grep dropbear\n```",
-  "updated_at": "24/11 20:32 WIB",
+  "updated_at": "24/11 20:53 WIB",
   "log_lines": 574,
   "ram_status": "742 / 1679 MB (Free 937 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "24/11 19:16 WIB",
-      "sev": "P2-INFO",
-      "src": "OpenWrt-EA8300",
-      "title": "Login SSH Admin Terverifikasi",
-      "detail": "<85>Nov 24 19:16:28 Ipad dropbear[15203]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:T1JRWuY3urmnwYKkyoqUmUyNmZnlN4tn09nhKqAc5cQ from 192.168.10.3:45706"
-    },
     {
       "ts": "24/11 19:21 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (176.53.159.196)",
       "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "24/11 20:53 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (45.156.87.65)",
+      "detail": "User: root/m@ils3rv3r | Abuse: 100% (NL, TechTies Inc.) | Shodan Ports: [22,443,992,1080,1153,1433,1883,1952] | CVEs: 0"
     }
   ]
 }
