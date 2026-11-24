@@ -7,7 +7,7 @@
   "mitre_name": "Valid Accounts",
   "mitre_desc": "Penyerang menggunakan kredensial sah (kunci SSH) untuk masuk sebagai root. SOC dapat mendeteksi dengan memantau log otentikasi SSH (dropbear), mencari login root dari alamat IP yang tidak biasa, memeriksa fingerprint kunci yang baru muncul, dan mengkorelasi dengan perubahan konfigurasi atau eksekusi perintah setelah login.",
   "mini_drill": "Gunakan perintah berikut untuk mengaudit sesi SSH root dalam 5 menit:\n```bash\n# Tampilkan 20 entri terakhir login root via dropbear\ngrep \"Pubkey auth succeeded for 'root'\" /var/log/syslog | tail -n 20\n\n# Cek fingerprint kunci yang baru muncul\nawk -F\"'\" '/Pubkey auth succeeded/ {print $4}' /var/log/syslog | sort | uniq -c\n\n# Tampilkan proses dropbear yang masih aktif\nps | grep dropbear\n```",
-  "updated_at": "25/11 02:22 WIB",
+  "updated_at": "25/11 02:32 WIB",
   "log_lines": 574,
   "ram_status": "742 / 1679 MB (Free 937 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,20 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "25/11 01:31 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
-      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
-    },
-    {
-      "ts": "25/11 01:32 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (172.237.0.29)",
-      "detail": "User: vsftpd/ubuntu | Abuse: 16% (JP, Linode) | Shodan Ports: [22,443] | CVEs: 0"
-    },
     {
       "ts": "25/11 01:32 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -111,6 +97,20 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (172.237.0.29)",
       "detail": "User: docker/test | Abuse: 16% (JP, Linode) | Shodan Ports: [22,443] | CVEs: 0"
+    },
+    {
+      "ts": "25/11 02:22 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (172.237.0.29)",
+      "detail": "CMD: uname -a | Abuse: 16% (JP, Linode) | Shodan Ports: [22,443] | CVEs: 0"
+    },
+    {
+      "ts": "25/11 02:32 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (172.237.0.29)",
+      "detail": "User: steam/postgres | Abuse: 16% (JP, Linode) | Shodan Ports: [22,443] | CVEs: 0"
     }
   ]
 }
