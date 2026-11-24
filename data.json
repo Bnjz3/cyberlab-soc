@@ -1,15 +1,15 @@
 {
-  "threat_level": "WASPADA (P1-HONEYPOT)",
-  "summary": "Terjadi serangkaian login root melalui antarmuka LuCI dari IP internal 192.168.10.4 serta percobaan koneksi SSH (dropbear) dari 192.168.10.3 yang kemudian diblokir oleh banIP. Aktivitas DHCP menunjukkan perangkat baru (d33p7ake, lwip0, PUBLIC2024) yang memperoleh alamat IP, menandakan kemungkinan penambahan host tidak sah ke jaringan.",
-  "log_sample": "<86>Nov 24 02:14:43 Ipad dispatcher.uc: luci: accepted login on / for root from 192.168.10.4",
-  "forensic_analysis": "Field‑by‑field:\n- `<86>`: PRI = 86 (facility=10 (security/authorization messages), severity=6 (informational)).\n- `Nov 24 02:14:43`: Timestamp (lokal WIB, UTC‑7).\n- `Ipad`: hostname router (OpenWrt EA8300).\n- `dispatcher.uc`: proses yang menangani request HTTP LuCI.\n- `luci: accepted login on / for root from 192.168.10.4`: pesan otentikasi berhasil; user=root, sumber IP=192.168.10.4, path=\"/\" (root UI).\n\nLog lain yang relevan:\n- `dropbear[7387]: Child connection from 192.168.10.3:54428` → koneksi SSH masuk.\n- `Exit before auth … Disconnect received` → klien memutus sebelum otentikasi selesai, tipikal scanning/brute‑force.\n- `banIP-1.9.2-r1[3128]: add IP '192.168.10.3' … to blocklist` → sistem otomatis memblokir IP setelah mendeteksi perilaku mencurigakan.\n- DHCP logs (`DHCPDISCOVER`, `DHCPOFFER`, `DHCPACK`) menandakan perangkat baru (MAC 28:d0:ea:7f:04:4a, c8:47:8c:30:1b:3a, 7c:8b:c1:6b:bc:f7) yang mendapatkan IP, beberapa dengan hostname “d33p7ake”, “lwip0”, “PUBLIC2024”.\n- Cron jobs (`sync-soc-cti.sh`) mengeksekusi pembaruan CTI dan feed banIP secara periodik.\n\nInterpretasi: \n1. Login root yang berhasil dari IP internal dapat menjadi admin sah, namun frekuensi tinggi (empat kali dalam satu menit) menimbulkan kecurigaan.\n2. Koneksi SSH yang diputus sebelum otentikasi dan pemblokiran otomatis menunjukkan upaya brute‑force atau scanning.\n3. Penambahan perangkat baru via DHCP dengan hostname yang tidak dikenal menambah indikasi perangkat asing di jaringan.",
-  "mitre_id": "T1110",
-  "mitre_name": "Brute Force",
-  "mitre_desc": "Log menunjukkan percobaan koneksi SSH yang berulang dan pemutusan sebelum otentikasi, serta login root yang berulang dari satu IP. Kedua pola ini cocok dengan teknik Brute Force (T1110) dimana penyerang mencoba banyak kredensial untuk memperoleh akses. Deteksi SOC dapat dilakukan dengan memantau log otentikasi (luci, dropbear), mengidentifikasi banyak percobaan login dalam rentang waktu singkat, dan mengkorelasikannya dengan pemblokiran otomatis oleh sistem seperti banIP.",
-  "mini_drill": "Gunakan perintah berikut untuk mengidentifikasi semua percobaan login root dalam 5 menit terakhir dan menampilkan IP yang terblokir:\n```\nlogread | grep -E \"luci: accepted login|dropbear\" | tail -n 50\nnft list set inet banIP blocklist\n```\nLangkah: 1) Jalankan perintah pertama, catat IP yang muncul berulang. 2) Jalankan perintah kedua untuk memastikan IP tersebut berada di blocklist. 3) Jika ada IP yang tidak terblokir namun mencurigakan, tambahkan manual dengan `nft add element inet banIP blocklist { <ip> }`.",
-  "updated_at": "24/11 19:23 WIB",
-  "log_lines": 463,
-  "ram_status": "758 / 1679 MB (Free 921 MB)",
+  "threat_level": "WASPADA",
+  "summary": "Log menunjukkan aktivitas DHCP normal serta cron job rutin, namun terdapat beberapa sesi SSH (dropbear) yang berhasil masuk sebagai root dari alamat internal 10.10.10.3 dan 192.168.10.3 menggunakan kunci publik. Login root via SSH dengan kunci publik dapat menandakan penggunaan akun valid yang telah disusupi atau akses administratif yang tidak terotorisasi. Perlu ditelusuri asal kunci, tujuan sesi, dan apakah ada perintah berbahaya yang dijalankan.",
+  "log_sample": "Nov 24 15:18:50 Ipad dropbear[24539]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:RC9Om00QekCWd9X9pRZrswTt/tWRw/lKPWiENl+buNk from 10.10.10.3:48868",
+  "forensic_analysis": "Field breakdown:\n- `<85>`: Syslog severity (85 = NOTICE level for dropbear). \n- `Nov 24 15:18:50`: Timestamp (lokal WIB, UTC+7). \n- `Ipad`: Hostname perangkat OpenWrt. \n- `dropbear[24539]`: Proses dropbear (SSH server) dengan PID 24539. \n- `Pubkey auth succeeded for 'root'`: Otentikasi berhasil menggunakan kunci publik untuk user root. \n- `ssh-ed25519 key SHA256:...`: Fingerprint kunci publik yang dipakai. \n- `from 10.10.10.3:48868`: Alamat sumber (IP internal) dan port sumber. \n\nKombinasi ini mengindikasikan bahwa akun root berhasil diakses secara remote, yang merupakan indikator teknik MITRE T1078 (Valid Accounts). Log lain yang relevan: `Child connection` (mencatat pembukaan sesi) dan `Exit` (penutupan sesi). Aktivitas DHCP tidak mencurigakan, namun pola IP yang konsisten (10.10.10.3 / 192.168.10.3) dapat menandakan host yang berpotensi berbahaya atau titik pivot.",
+  "mitre_id": "T1078",
+  "mitre_name": "Valid Accounts",
+  "mitre_desc": "Penyerang menggunakan kredensial sah (kunci SSH) untuk masuk sebagai root. SOC dapat mendeteksi dengan memantau log otentikasi SSH (dropbear), mencari login root dari alamat IP yang tidak biasa, memeriksa fingerprint kunci yang baru muncul, dan mengkorelasi dengan perubahan konfigurasi atau eksekusi perintah setelah login.",
+  "mini_drill": "Gunakan perintah berikut untuk mengaudit sesi SSH root dalam 5 menit:\n```bash\n# Tampilkan 20 entri terakhir login root via dropbear\ngrep \"Pubkey auth succeeded for 'root'\" /var/log/syslog | tail -n 20\n\n# Cek fingerprint kunci yang baru muncul\nawk -F\"'\" '/Pubkey auth succeeded/ {print $4}' /var/log/syslog | sort | uniq -c\n\n# Tampilkan proses dropbear yang masih aktif\nps | grep dropbear\n```",
+  "updated_at": "24 Nov 2026 19:38 WIB",
+  "log_lines": 574,
+  "ram_status": "742 / 1679 MB (Free 937 MB)",
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
@@ -28,20 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "24/11 17:38 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
-      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
-    },
-    {
-      "ts": "24/11 18:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (102.220.161.79)",
-      "detail": "User: root/soroka | Abuse: 100% (SI, Internet) | Shodan Ports: [443,873,1080,1343,1401,1500,1801,1952] | CVEs: 0"
-    },
     {
       "ts": "24/11 18:21 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +97,20 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (102.220.161.79)",
       "detail": "User: bane/bane | Abuse: 100% (SI, Internet) | Shodan Ports: [443,873,1080,1343,1401,1500,1801,1952] | CVEs: 0"
+    },
+    {
+      "ts": "24/11 19:36 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-24T20:36:50.514730+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/home/ubuntu ; USER=root ; COMMAND=/usr/bin/docker exec crowdsec-soc cscli machines validate awandata-aegis"
+    },
+    {
+      "ts": "24/11 19:38 WIB",
+      "sev": "P2-INFO",
+      "src": "VPS-Jakarta",
+      "title": "Eksekusi Perintah Root (sudo)",
+      "detail": "2026-11-24T20:38:26.754778+08:00 localhost sudo:   ubuntu : TTY=pts/0 ; PWD=/opt/cyberlab ; USER=root ; COMMAND=/usr/bin/python3 -"
     }
   ]
 }
