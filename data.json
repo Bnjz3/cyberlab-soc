@@ -7,7 +7,7 @@
   "mitre_name": "Scheduled Task",
   "mitre_desc": "Eksekusi rutin skrip `/usr/bin/sync-soc-cti.sh` melalui cron merupakan contoh penggunaan Scheduled Task (T1053). SOC dapat mendeteksi penyalahgunaan teknik ini dengan memantau perubahan pada crontab, frekuensi eksekusi yang tidak biasa, atau skrip yang tidak dikenal. Log cron yang konsisten dan berasal dari user root pada interval tetap biasanya dianggap benign, namun perubahan mendadak pada jadwal atau konten skrip harus diinvestigasi.",
   "mini_drill": "Perintah: `logread -e \"dnsmasq-dhcp\" | tail -n 20` – tampilkan 20 entri DHCP terbaru, identifikasi MAC address dan hostname yang baru muncul, lalu catat apakah ada perangkat yang tidak dikenal.",
-  "updated_at": "25/11 16:03 WIB",
+  "updated_at": "25/11 17:13 WIB",
   "log_lines": 631,
   "ram_status": "707 / 1679 MB (Free 972 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "25/11 11:00 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (101.37.237.16)",
-      "detail": "User: root/letmei | Abuse: 92% (CN, Aliyun Computing Co., LTD) | Shodan Ports: [22] | CVEs: 0"
-    },
     {
       "ts": "25/11 11:00 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (106.15.236.209)",
       "detail": "User: admin/admin | Abuse: 100% (CN, Aliyun Computing Co., LTD) | Shodan Ports: [8083] | CVEs: 0"
+    },
+    {
+      "ts": "25/11 17:13 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
+      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
