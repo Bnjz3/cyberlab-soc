@@ -7,7 +7,7 @@
   "mitre_name": "Scheduled Task",
   "mitre_desc": "Eksekusi rutin skrip `/usr/bin/sync-soc-cti.sh` melalui cron merupakan contoh penggunaan Scheduled Task (T1053). SOC dapat mendeteksi penyalahgunaan teknik ini dengan memantau perubahan pada crontab, frekuensi eksekusi yang tidak biasa, atau skrip yang tidak dikenal. Log cron yang konsisten dan berasal dari user root pada interval tetap biasanya dianggap benign, namun perubahan mendadak pada jadwal atau konten skrip harus diinvestigasi.",
   "mini_drill": "Perintah: `logread -e \"dnsmasq-dhcp\" | tail -n 20` – tampilkan 20 entri DHCP terbaru, identifikasi MAC address dan hostname yang baru muncul, lalu catat apakah ada perangkat yang tidak dikenal.",
-  "updated_at": "26/11 02:18 WIB",
+  "updated_at": "26/11 02:46 WIB",
   "log_lines": 631,
   "ram_status": "707 / 1679 MB (Free 972 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "25/11 22:50 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (188.150.51.151)",
-      "detail": "User: support/support | Abuse: 9% (SE, SE TELE2 BROADBAND)"
-    },
     {
       "ts": "25/11 22:56 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -107,6 +100,13 @@
     },
     {
       "ts": "26/11 02:18 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (174.138.22.184)",
+      "detail": "User: root/invalid_probe_9x8y7z | Abuse: 0% (SG, DigitalOcean, LLC) | Shodan Ports: [8080,21330] | CVEs: 0"
+    },
+    {
+      "ts": "26/11 02:46 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (174.138.22.184)",
