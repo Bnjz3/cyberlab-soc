@@ -1,15 +1,15 @@
 {
-  "threat_level": "WASPADA (P1-HONEYPOT)",
-  "summary": "Log menunjukkan aktivitas DHCP normal serta cron job rutin, namun terdapat beberapa sesi SSH (dropbear) yang berhasil masuk sebagai root dari alamat internal 10.10.10.3 dan 192.168.10.3 menggunakan kunci publik. Login root via SSH dengan kunci publik dapat menandakan penggunaan akun valid yang telah disusupi atau akses administratif yang tidak terotorisasi. Perlu ditelusuri asal kunci, tujuan sesi, dan apakah ada perintah berbahaya yang dijalankan.",
-  "log_sample": "Nov 24 15:18:50 Ipad dropbear[24539]: Pubkey auth succeeded for 'root' with ssh-ed25519 key SHA256:RC9Om00QekCWd9X9pRZrswTt/tWRw/lKPWiENl+buNk from 10.10.10.3:48868",
-  "forensic_analysis": "Field breakdown:\n- `<85>`: Syslog severity (85 = NOTICE level for dropbear). \n- `Nov 24 15:18:50`: Timestamp (lokal WIB, UTC+7). \n- `Ipad`: Hostname perangkat OpenWrt. \n- `dropbear[24539]`: Proses dropbear (SSH server) dengan PID 24539. \n- `Pubkey auth succeeded for 'root'`: Otentikasi berhasil menggunakan kunci publik untuk user root. \n- `ssh-ed25519 key SHA256:...`: Fingerprint kunci publik yang dipakai. \n- `from 10.10.10.3:48868`: Alamat sumber (IP internal) dan port sumber. \n\nKombinasi ini mengindikasikan bahwa akun root berhasil diakses secara remote, yang merupakan indikator teknik MITRE T1078 (Valid Accounts). Log lain yang relevan: `Child connection` (mencatat pembukaan sesi) dan `Exit` (penutupan sesi). Aktivitas DHCP tidak mencurigakan, namun pola IP yang konsisten (10.10.10.3 / 192.168.10.3) dapat menandakan host yang berpotensi berbahaya atau titik pivot.",
-  "mitre_id": "T1078",
-  "mitre_name": "Valid Accounts",
-  "mitre_desc": "Penyerang menggunakan kredensial sah (kunci SSH) untuk masuk sebagai root. SOC dapat mendeteksi dengan memantau log otentikasi SSH (dropbear), mencari login root dari alamat IP yang tidak biasa, memeriksa fingerprint kunci yang baru muncul, dan mengkorelasi dengan perubahan konfigurasi atau eksekusi perintah setelah login.",
-  "mini_drill": "Gunakan perintah berikut untuk mengaudit sesi SSH root dalam 5 menit:\n```bash\n# Tampilkan 20 entri terakhir login root via dropbear\ngrep \"Pubkey auth succeeded for 'root'\" /var/log/syslog | tail -n 20\n\n# Cek fingerprint kunci yang baru muncul\nawk -F\"'\" '/Pubkey auth succeeded/ {print $4}' /var/log/syslog | sort | uniq -c\n\n# Tampilkan proses dropbear yang masih aktif\nps | grep dropbear\n```",
-  "updated_at": "25/11 06:56 WIB",
-  "log_lines": 574,
-  "ram_status": "742 / 1679 MB (Free 937 MB)",
+  "threat_level": "AMAN / NORMAL",
+  "summary": "Log menunjukkan aktivitas rutin pada router OpenWrt: proses pembaruan banIP, penanganan DHCP untuk perangkat di jaringan LAN, dan eksekusi skrip cron setiap 30 menit. Tidak ada indikasi kegagalan, akses tidak sah, atau perilaku anomali.",
+  "log_sample": "<30>Nov 25 05:23:32 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.6 16:3d:cc:13:85:bf iPhone-Rolan",
+  "forensic_analysis": "Field‑field log:\n- `<30>`: PRI (facility=3, severity=6) menandakan informational message dari daemon.\n- `Nov 25 05:23:32`: Timestamp lokal (WIB) – penting untuk korelasi timeline.\n- `Ipad`: hostname router (OpenWrt EA8300).\n- `dnsmasq-dhcp[1]`: proses dnsmasq handling DHCP, PID 1 (init).\n- `DHCPACK(br-lan) 192.168.10.6 16:3d:cc:13:85:bf iPhone-Rolan`: pesan utama – server DHCP mengalokasikan IP 192.168.10.6 ke MAC 16:3d:cc:13:85:bf dengan hostname *iPhone-Rolan*. Ini menandakan perangkat sah bergabung ke jaringan.\n\nLog lain (cron) memiliki format serupa, menandakan eksekusi skrip `/usr/bin/sync-soc-cti.sh` oleh user root pada interval 30‑menit, yang merupakan tugas terjadwal normal.",
+  "mitre_id": "T1053",
+  "mitre_name": "Scheduled Task",
+  "mitre_desc": "Eksekusi rutin skrip `/usr/bin/sync-soc-cti.sh` melalui cron merupakan contoh penggunaan Scheduled Task (T1053). SOC dapat mendeteksi penyalahgunaan teknik ini dengan memantau perubahan pada crontab, frekuensi eksekusi yang tidak biasa, atau skrip yang tidak dikenal. Log cron yang konsisten dan berasal dari user root pada interval tetap biasanya dianggap benign, namun perubahan mendadak pada jadwal atau konten skrip harus diinvestigasi.",
+  "mini_drill": "Perintah: `logread -e \"dnsmasq-dhcp\" | tail -n 20` – tampilkan 20 entri DHCP terbaru, identifikasi MAC address dan hostname yang baru muncul, lalu catat apakah ada perangkat yang tidak dikenal.",
+  "updated_at": "25 Nov 2026 07:00 WIB",
+  "log_lines": 631,
+  "ram_status": "707 / 1679 MB (Free 972 MB)",
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "25/11 06:16 WIB",
-      "sev": "P1-HONEYPOT CMD",
-      "src": "Cowrie-Trap",
-      "title": "Perintah Penyerang (101.37.237.16)",
-      "detail": "CMD: echo -e \"\\x6F\\x6B\" | Abuse: 92% (CN, Aliyun Computing Co., LTD) | Shodan Ports: [22] | CVEs: 0"
-    },
     {
       "ts": "25/11 06:16 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (101.37.237.16)",
       "detail": "User: root/elisha | Abuse: 92% (CN, Aliyun Computing Co., LTD) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "25/11 06:56 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (101.37.237.16)",
+      "detail": "CMD: echo -e \"\\x6F\\x6B\" | Abuse: 92% (CN, Aliyun Computing Co., LTD) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
