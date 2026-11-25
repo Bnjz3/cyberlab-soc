@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-HONEYPOT CMD)",
+  "threat_level": "WASPADA (P1-HONEYPOT)",
   "summary": "Log menunjukkan aktivitas rutin pada router OpenWrt: proses pembaruan banIP, penanganan DHCP untuk perangkat di jaringan LAN, dan eksekusi skrip cron setiap 30 menit. Tidak ada indikasi kegagalan, akses tidak sah, atau perilaku anomali.",
   "log_sample": "<30>Nov 25 05:23:32 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.6 16:3d:cc:13:85:bf iPhone-Rolan",
   "forensic_analysis": "Field‑field log:\n- `<30>`: PRI (facility=3, severity=6) menandakan informational message dari daemon.\n- `Nov 25 05:23:32`: Timestamp lokal (WIB) – penting untuk korelasi timeline.\n- `Ipad`: hostname router (OpenWrt EA8300).\n- `dnsmasq-dhcp[1]`: proses dnsmasq handling DHCP, PID 1 (init).\n- `DHCPACK(br-lan) 192.168.10.6 16:3d:cc:13:85:bf iPhone-Rolan`: pesan utama – server DHCP mengalokasikan IP 192.168.10.6 ke MAC 16:3d:cc:13:85:bf dengan hostname *iPhone-Rolan*. Ini menandakan perangkat sah bergabung ke jaringan.\n\nLog lain (cron) memiliki format serupa, menandakan eksekusi skrip `/usr/bin/sync-soc-cti.sh` oleh user root pada interval 30‑menit, yang merupakan tugas terjadwal normal.",
@@ -7,7 +7,7 @@
   "mitre_name": "Scheduled Task",
   "mitre_desc": "Eksekusi rutin skrip `/usr/bin/sync-soc-cti.sh` melalui cron merupakan contoh penggunaan Scheduled Task (T1053). SOC dapat mendeteksi penyalahgunaan teknik ini dengan memantau perubahan pada crontab, frekuensi eksekusi yang tidak biasa, atau skrip yang tidak dikenal. Log cron yang konsisten dan berasal dari user root pada interval tetap biasanya dianggap benign, namun perubahan mendadak pada jadwal atau konten skrip harus diinvestigasi.",
   "mini_drill": "Perintah: `logread -e \"dnsmasq-dhcp\" | tail -n 20` – tampilkan 20 entri DHCP terbaru, identifikasi MAC address dan hostname yang baru muncul, lalu catat apakah ada perangkat yang tidak dikenal.",
-  "updated_at": "26/11 02:46 WIB",
+  "updated_at": "26/11 02:56 WIB",
   "log_lines": 631,
   "ram_status": "707 / 1679 MB (Free 972 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "25/11 22:58 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (161.35.233.174)",
-      "detail": "User: c/c123 | Abuse: 22% (US, DigitalOcean, LLC) | Shodan Ports: [22,80,111,9273] | CVEs: 0"
-    },
     {
       "ts": "25/11 23:07 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Perintah Penyerang (174.138.22.184)",
       "detail": "CMD: uname -s -v -n -r -m | Abuse: 0% (SG, DigitalOcean, LLC) | Shodan Ports: [8080,21330] | CVEs: 0"
+    },
+    {
+      "ts": "26/11 02:56 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (174.138.22.184)",
+      "detail": "User: user/Aa123456 | Abuse: 0% (SG, DigitalOcean, LLC) | Shodan Ports: [8080,21330] | CVEs: 0"
     }
   ]
 }
