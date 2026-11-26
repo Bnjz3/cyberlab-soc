@@ -29,13 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "26/11 20:14 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (77.239.124.161)",
-      "detail": "User: testuser02/testuser02 | Abuse: 100% (NL, ROCKET & MARINICA LTD) | Shodan Ports: [22] | CVEs: 0"
-    },
-    {
       "ts": "26/11 20:20 WIB",
       "sev": "P1-FIM TAMPER",
       "src": "VPS-Host",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (152.42.234.192)",
       "detail": "User: osmc/osmc | Abuse: 14% (SG, DigitalOcean, LLC)"
+    },
+    {
+      "ts": "26/11 20:45 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
+      "detail": "User: ubuntu/root7654321 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
