@@ -29,20 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "26/11 18:55 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (163.52.135.28)",
-      "detail": "User: root/root7654321 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
-    },
-    {
-      "ts": "26/11 18:59 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
-    {
       "ts": "26/11 19:00 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
@@ -111,6 +97,20 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (177.75.235.46)",
       "detail": "User: ubuntu/0035 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
+    },
+    {
+      "ts": "26/11 19:35 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (177.75.235.46)",
+      "detail": "CMD: echo xsec | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
+    },
+    {
+      "ts": "26/11 19:35 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (77.239.124.161)",
+      "detail": "User: newuser/newuser123 | Abuse: 100% (NL, ROCKET & MARINICA LTD) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
