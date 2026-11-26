@@ -32,13 +32,6 @@
       "ts": "26/11 18:19 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
-      "detail": "User: ubuntu/0012 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
-    {
-      "ts": "26/11 18:19 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (163.52.135.28)",
       "detail": "User: root/0025 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
     },
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (77.239.124.161)",
       "detail": "User: root/1qaz2wsx3 | Abuse: 100% (NL, ROCKET & MARINICA LTD) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "26/11 18:45 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
+      "detail": "User: ubuntu/0020 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
