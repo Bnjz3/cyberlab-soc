@@ -29,13 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "27/11 00:39 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
-    {
       "ts": "27/11 00:41 WIB",
       "sev": "P1-HONEYPOT CMD",
       "src": "Cowrie-Trap",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (176.53.159.196)",
       "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "27/11 01:14 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
+      "detail": "User: ubuntu/1234567890 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
