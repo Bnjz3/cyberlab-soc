@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-HONEYPOT)",
+  "threat_level": "WASPADA (P1-FIM TAMPER)",
   "summary": "Log menunjukkan aktivitas DHCP standar pada jaringan LAN (penawaran, permintaan, dan ack) serta cron job rutin yang dijalankan oleh root setiap 30 menit. Tidak ada indikasi kegagalan autentikasi, layanan tidak dikenal, atau pola anomali yang mengarah pada serangan.",
   "log_sample": "<30>Nov 26 02:06:30 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.4 7c:8b:c1:6b:bc:f7 PUBLIC2024",
   "forensic_analysis": "Field‑field log:\n- `<30>`: PRI (facility=3, severity=6) menandakan pesan informational.\n- `Nov 26 02:06:30`: Timestamp lokal (WIB) – 26 November 2026 02:06:30.\n- `Ipad`: Hostname perangkat OpenWrt (router).\n- `dnsmasq-dhcp[1]`: Proses dnsmasq (PID 1) yang menangani DHCP.\n- `DHCPACK(br-lan)`: Tipe pesan DHCP (ACK) pada interface bridge `br-lan`.\n- `192.168.10.4`: Alamat IP yang diberikan ke klien.\n- `7c:8b:c1:6b:bc:f7`: MAC address klien yang meminta lease.\n- `PUBLIC2024`: Nama host (opsional) yang dilaporkan oleh klien.\n\nSeluruh rangkaian log (DISCOVER → OFFER → REQUEST → ACK) berulang untuk beberapa perangkat (mis. 28:04:7a:36:db:b5, bc:b2:cc:6e:fd:98, c8:90:8a:06:22:17) menandakan lease renewal yang normal. Cron entry `sync-soc-cti.sh` dijalankan oleh root setiap setengah jam, yang tampak seperti tugas pemeliharaan/ sinkronisasi internal.",
@@ -7,7 +7,7 @@
   "mitre_name": "System Network Configuration Discovery",
   "mitre_desc": "Perangkat yang melakukan DHCPDISCOVER/DHCPREQUEST secara berulang dapat dianggap sedang mengumpulkan informasi jaringan (alamat IP, gateway, DNS). Teknik ini termasuk dalam ATT&CK T1016.001. Deteksi SOC dapat dilakukan dengan memantau frekuensi DHCPREQUEST dari satu MAC ke banyak IP atau sebaliknya, serta mendeteksi pola lease renewal yang tidak wajar.",
   "mini_drill": "Perintah latihan 5 menit: \n```bash\n# Tampilkan lease DHCP terkini dan pantau perubahan secara real‑time\nwatch -n 5 \"cat /tmp/dhcp.leases || cat /var/lib/misc/dnsmasq.leases\"\n```\nLatihan ini mengajarkan cara memeriksa tabel lease, mengidentifikasi perangkat baru, dan mendeteksi anomali lease yang berulang.\n",
-  "updated_at": "27/11 03:06 WIB",
+  "updated_at": "27/11 03:12 WIB",
   "log_lines": 833,
   "ram_status": "729 / 1679 MB (Free 950 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,20 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "27/11 02:35 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
-    {
-      "ts": "27/11 02:38 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
-      "detail": "User: ubuntu/c | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
     {
       "ts": "27/11 02:39 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +97,20 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (163.52.135.28)",
       "detail": "User: root/admin123 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "27/11 03:07 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (163.52.135.28)",
+      "detail": "CMD: echo xsec | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "27/11 03:12 WIB",
+      "sev": "P1-FIM TAMPER",
+      "src": "VPS-Host",
+      "title": "Modifikasi File Kritis Terdeteksi!",
+      "detail": "Perubahan pada: soc_bot.py"
     }
   ]
 }
