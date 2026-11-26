@@ -7,7 +7,7 @@
   "mitre_name": "System Network Configuration Discovery",
   "mitre_desc": "Perangkat yang melakukan DHCPDISCOVER/DHCPREQUEST secara berulang dapat dianggap sedang mengumpulkan informasi jaringan (alamat IP, gateway, DNS). Teknik ini termasuk dalam ATT&CK T1016.001. Deteksi SOC dapat dilakukan dengan memantau frekuensi DHCPREQUEST dari satu MAC ke banyak IP atau sebaliknya, serta mendeteksi pola lease renewal yang tidak wajar.",
   "mini_drill": "Perintah latihan 5 menit: \n```bash\n# Tampilkan lease DHCP terkini dan pantau perubahan secara real‑time\nwatch -n 5 \"cat /tmp/dhcp.leases || cat /var/lib/misc/dnsmasq.leases\"\n```\nLatihan ini mengajarkan cara memeriksa tabel lease, mengidentifikasi perangkat baru, dan mendeteksi anomali lease yang berulang.\n",
-  "updated_at": "26/11 09:24 WIB",
+  "updated_at": "26/11 09:51 WIB",
   "log_lines": 833,
   "ram_status": "729 / 1679 MB (Free 950 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "26/11 04:56 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (102.220.161.79)",
-      "detail": "User: root/each | Abuse: 100% (SI, Internet) | Shodan Ports: [22,443,873,1080,1343,1401,1500,1801] | CVEs: 0"
-    },
     {
       "ts": "26/11 05:00 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (35.210.24.61)",
       "detail": "User: admin/admin | Abuse: 100% (BE, Google LLC) | Shodan Ports: [80] | CVEs: 0"
+    },
+    {
+      "ts": "26/11 09:51 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (176.53.159.196)",
+      "detail": "User: support/support | Abuse: 100% (PL, BearShield Technologies S.R.O.) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
