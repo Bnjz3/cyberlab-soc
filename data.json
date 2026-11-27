@@ -29,13 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "27/11 23:23 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
-      "detail": "User: ubuntu/Admin_ | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
-    {
       "ts": "27/11 23:25 WIB",
       "sev": "P1-HONEYPOT CMD",
       "src": "Cowrie-Trap",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (102.220.161.173)",
       "detail": "User: chengys/chengys123 | Abuse: 100% (SI, Internet) | Shodan Ports: [22,443,993,1023,1080,1738,1926,1965] | CVEs: 0"
+    },
+    {
+      "ts": "28/11 00:00 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (102.220.161.119)",
+      "detail": "User: altair/passwd | Abuse: 100% (SI, Internet) | Shodan Ports: [443,990,1012,1080,1453,1605,2022,2049] | CVEs: 0"
     }
   ]
 }
