@@ -29,13 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "27/11 22:43 WIB",
-      "sev": "P1-HONEYPOT CMD",
-      "src": "Cowrie-Trap",
-      "title": "Perintah Penyerang (177.75.235.46)",
-      "detail": "CMD: echo xsec | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
-    {
       "ts": "27/11 22:47 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (102.220.161.173)",
       "detail": "User: root/diamond06 | Abuse: 100% (SI, Internet) | Shodan Ports: [22,443,993,1023,1080,1738,1926,1965] | CVEs: 0"
+    },
+    {
+      "ts": "27/11 23:18 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (163.52.135.28)",
+      "detail": "User: root/Qwer!234 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
