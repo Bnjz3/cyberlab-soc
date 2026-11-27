@@ -1,5 +1,5 @@
 {
-  "threat_level": "WASPADA (P1-FIM TAMPER)",
+  "threat_level": "WASPADA (P1-HONEYPOT)",
   "summary": "Terjadi lonjakan permintaan DHCP (DHCPDISCOVER/DHCPOFFER) dari MAC bc:b2:cc:6e:fd:98 dalam rentang waktu beberapa detik, diikuti oleh permintaan DHCP normal dari perangkat lain. Aktivitas ini dapat mengindikasikan serangan DHCP starvation atau perangkat yang mengalami konfigurasi jaringan yang rusak.",
   "log_sample": "<30>Nov 27 04:52:04 Ipad dnsmasq-dhcp[1]: DHCPDISCOVER(br-lan) bc:b2:cc:6e:fd:98\n<30>Nov 27 04:52:04 Ipad dnsmasq-dhcp[1]: DHCPOFFER(br-lan) 192.168.10.10 bc:b2:cc:6e:fd:98",
   "forensic_analysis": "Field breakdown:\n- `<30>`: Facility/Severity (30 = informational). \n- `Nov 27 04:52:04`: Timestamp (lokal WIB). \n- `Ipad`: Hostname perangkat OpenWrt. \n- `dnsmasq-dhcp[1]`: Proses dnsmasq (PID 1) yang menangani DHCP. \n- `DHCPDISCOVER(br-lan) bc:b2:cc:6e:fd:98`: Paket DISCOVER dikirim oleh klien pada bridge interface br‑lan, MAC address bc:b2:cc:6e:fd:98. \n- `DHCPOFFER(br-lan) 192.168.10.10 bc:b2:cc:6e:fd:98`: Server menawarkan IP 192.168.10.10 ke MAC yang sama. \n\nSerangkaian DISCOVER/OFFER berulang dalam hitungan detik menunjukkan klien tidak menerima ACK atau ACK ditolak, sehingga klien terus mengulang permintaan. Ini dapat disebabkan oleh: (1) perangkat yang rusak, (2) konfigurasi DHCP yang konflik, atau (3) upaya DHCP starvation untuk menghabiskan pool alamat.",
@@ -7,7 +7,7 @@
   "mitre_name": "Network Denial of Service",
   "mitre_desc": "Serangan DHCP starvation menurunkan ketersediaan layanan jaringan dengan mengirimkan permintaan DHCP secara berulang sehingga server kehabisan alamat IP. Log yang menunjukkan banyak DHCPDISCOVER/DHCPOFFER dalam interval sangat pendek cocok dengan teknik ini. Deteksi SOC dapat dilakukan dengan menyiapkan threshold pada jumlah DHCPDISCOVER per MAC atau per interval waktu, serta memantau pool lease exhaustion.",
   "mini_drill": "Jalankan perintah berikut selama 5 menit untuk mengidentifikasi klien yang menghasilkan banyak permintaan DHCP:\n```\n# Tampilkan lease saat ini\ncat /tmp/dhcp.leases\n\n# Monitor log DHCP secara real‑time dan hitung DISCOVER per MAC\nlogread -e \"dnsmasq-dhcp\" | grep DHCPDISCOVER | awk '{print $NF}' | sort | uniq -c | sort -nr\n```\nCatat MAC dengan hit count > 5 dalam satu menit sebagai indikasi potensial.",
-  "updated_at": "27/11 12:45 WIB",
+  "updated_at": "27/11 12:50 WIB",
   "log_lines": 1093,
   "ram_status": "739 / 1679 MB (Free 940 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "27/11 12:13 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
     {
       "ts": "27/11 12:16 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +104,13 @@
       "src": "VPS-Host",
       "title": "Modifikasi File Kritis Terdeteksi!",
       "detail": "Perubahan pada: soc_bot.py"
+    },
+    {
+      "ts": "27/11 12:50 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
+      "detail": "User: ubuntu/Zz123456 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
