@@ -7,7 +7,7 @@
   "mitre_name": "Network Denial of Service",
   "mitre_desc": "Serangan DHCP starvation menurunkan ketersediaan layanan jaringan dengan mengirimkan permintaan DHCP secara berulang sehingga server kehabisan alamat IP. Log yang menunjukkan banyak DHCPDISCOVER/DHCPOFFER dalam interval sangat pendek cocok dengan teknik ini. Deteksi SOC dapat dilakukan dengan menyiapkan threshold pada jumlah DHCPDISCOVER per MAC atau per interval waktu, serta memantau pool lease exhaustion.",
   "mini_drill": "Jalankan perintah berikut selama 5 menit untuk mengidentifikasi klien yang menghasilkan banyak permintaan DHCP:\n```\n# Tampilkan lease saat ini\ncat /tmp/dhcp.leases\n\n# Monitor log DHCP secara real‑time dan hitung DISCOVER per MAC\nlogread -e \"dnsmasq-dhcp\" | grep DHCPDISCOVER | awk '{print $NF}' | sort | uniq -c | sort -nr\n```\nCatat MAC dengan hit count > 5 dalam satu menit sebagai indikasi potensial.",
-  "updated_at": "27/11 23:05 WIB",
+  "updated_at": "27/11 23:07 WIB",
   "log_lines": 1093,
   "ram_status": "739 / 1679 MB (Free 940 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "27/11 22:25 WIB",
-      "sev": "P1-FIM TAMPER",
-      "src": "VPS-Host",
-      "title": "Modifikasi File Kritis Terdeteksi!",
-      "detail": "Perubahan pada: soc_bot.py"
-    },
     {
       "ts": "27/11 22:30 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (163.52.135.28)",
       "detail": "User: root/Password123456 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "27/11 23:07 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
+      "detail": "User: ubuntu/Abc123456! | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
