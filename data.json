@@ -29,13 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "28/11 22:26 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (157.230.241.106)",
-      "detail": "User: ftpuser/12345678 | Abuse: 19% (SG, DigitalOcean, LLC) | Shodan Ports: [80,443] | CVEs: 0"
-    },
-    {
       "ts": "28/11 22:30 WIB",
       "sev": "P1-HONEYPOT",
       "src": "Cowrie-Trap",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (163.52.135.28)",
       "detail": "User: root/localhost.123 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "28/11 22:57 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (77.239.124.161)",
+      "detail": "User: o/o | Abuse: 100% (NL, ROCKET & MARINICA LTD) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
