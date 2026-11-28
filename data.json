@@ -7,7 +7,7 @@
   "mitre_name": "System Network Configuration Discovery",
   "mitre_desc": "Permintaan DHCP (DHCPREQUEST/DHCPACK) mencerminkan perangkat yang mengumpulkan informasi jaringan (IP, subnet, gateway). Pada MITRE ATT&CK, ini termasuk teknik T1016 dimana penyerang atau alat keamanan mengumpulkan konfigurasi jaringan untuk pemetaan. SOC dapat mendeteksi anomali dengan memantau frekuensi DHCP, MAC address yang tidak dikenal, atau pola permintaan yang tidak biasa.",
   "mini_drill": "cat /tmp/dhcp.leases   # Tampilkan lease DHCP aktif dan verifikasi MAC/IP yang terdaftar dalam 5 menit",
-  "updated_at": "28/11 16:34 WIB",
+  "updated_at": "28/11 16:36 WIB",
   "log_lines": 3970,
   "ram_status": "691 / 1679 MB (Free 988 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "28/11 15:58 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
-      "detail": "User: ubuntu/!@#123QWEqwe | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
     {
       "ts": "28/11 16:00 WIB",
       "sev": "P1-HONEYPOT CMD",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (177.75.235.46)",
       "detail": "User: ubuntu/123@123A | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
+    },
+    {
+      "ts": "28/11 16:36 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (163.52.135.28)",
+      "detail": "User: root/Test1234! | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
     }
   ]
 }
