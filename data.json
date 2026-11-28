@@ -29,20 +29,6 @@
   ],
   "recent_alerts": [
     {
-      "ts": "28/11 11:43 WIB",
-      "sev": "P1-HONEYPOT CMD",
-      "src": "Cowrie-Trap",
-      "title": "Perintah Penyerang (177.75.235.46)",
-      "detail": "CMD: echo xsec | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
-    {
-      "ts": "28/11 11:47 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (163.52.135.28)",
-      "detail": "User: root/1234@abcd | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
-    },
-    {
       "ts": "28/11 11:47 WIB",
       "sev": "P1-HONEYPOT CMD",
       "src": "Cowrie-Trap",
@@ -111,6 +97,20 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (163.52.135.28)",
       "detail": "User: root/Windows@123 | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "28/11 12:20 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (163.52.135.28)",
+      "detail": "CMD: echo xsec | Abuse: 100% (ID, CV Griya Cloud Server) | Shodan Ports: [22] | CVEs: 0"
+    },
+    {
+      "ts": "28/11 12:20 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
+      "detail": "User: ubuntu/QWE123 | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
