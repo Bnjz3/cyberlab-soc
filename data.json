@@ -1,15 +1,15 @@
 {
-  "threat_level": "WASPADA (P1-HONEYPOT)",
-  "summary": "Terjadi lonjakan permintaan DHCP (DHCPDISCOVER/DHCPOFFER) dari MAC bc:b2:cc:6e:fd:98 dalam rentang waktu beberapa detik, diikuti oleh permintaan DHCP normal dari perangkat lain. Aktivitas ini dapat mengindikasikan serangan DHCP starvation atau perangkat yang mengalami konfigurasi jaringan yang rusak.",
-  "log_sample": "<30>Nov 27 04:52:04 Ipad dnsmasq-dhcp[1]: DHCPDISCOVER(br-lan) bc:b2:cc:6e:fd:98\n<30>Nov 27 04:52:04 Ipad dnsmasq-dhcp[1]: DHCPOFFER(br-lan) 192.168.10.10 bc:b2:cc:6e:fd:98",
-  "forensic_analysis": "Field breakdown:\n- `<30>`: Facility/Severity (30 = informational). \n- `Nov 27 04:52:04`: Timestamp (lokal WIB). \n- `Ipad`: Hostname perangkat OpenWrt. \n- `dnsmasq-dhcp[1]`: Proses dnsmasq (PID 1) yang menangani DHCP. \n- `DHCPDISCOVER(br-lan) bc:b2:cc:6e:fd:98`: Paket DISCOVER dikirim oleh klien pada bridge interface br‑lan, MAC address bc:b2:cc:6e:fd:98. \n- `DHCPOFFER(br-lan) 192.168.10.10 bc:b2:cc:6e:fd:98`: Server menawarkan IP 192.168.10.10 ke MAC yang sama. \n\nSerangkaian DISCOVER/OFFER berulang dalam hitungan detik menunjukkan klien tidak menerima ACK atau ACK ditolak, sehingga klien terus mengulang permintaan. Ini dapat disebabkan oleh: (1) perangkat yang rusak, (2) konfigurasi DHCP yang konflik, atau (3) upaya DHCP starvation untuk menghabiskan pool alamat.",
-  "mitre_id": "T1499.001",
-  "mitre_name": "Network Denial of Service",
-  "mitre_desc": "Serangan DHCP starvation menurunkan ketersediaan layanan jaringan dengan mengirimkan permintaan DHCP secara berulang sehingga server kehabisan alamat IP. Log yang menunjukkan banyak DHCPDISCOVER/DHCPOFFER dalam interval sangat pendek cocok dengan teknik ini. Deteksi SOC dapat dilakukan dengan menyiapkan threshold pada jumlah DHCPDISCOVER per MAC atau per interval waktu, serta memantau pool lease exhaustion.",
-  "mini_drill": "Jalankan perintah berikut selama 5 menit untuk mengidentifikasi klien yang menghasilkan banyak permintaan DHCP:\n```\n# Tampilkan lease saat ini\ncat /tmp/dhcp.leases\n\n# Monitor log DHCP secara real‑time dan hitung DISCOVER per MAC\nlogread -e \"dnsmasq-dhcp\" | grep DHCPDISCOVER | awk '{print $NF}' | sort | uniq -c | sort -nr\n```\nCatat MAC dengan hit count > 5 dalam satu menit sebagai indikasi potensial.",
-  "updated_at": "28/11 06:54 WIB",
-  "log_lines": 1093,
-  "ram_status": "739 / 1679 MB (Free 940 MB)",
+  "threat_level": "AMAN / NORMAL",
+  "summary": "Log menunjukkan aktivitas DHCP standar pada jaringan LAN serta eksekusi rutin skrip monitoring (aegis-blackbox.sh) dan sinkronisasi (sync-soc-cti.sh) melalui cron setiap dua menit. Tidak ada indikasi kegagalan, perubahan konfigurasi, atau pola anomali yang mengarah pada serangan.",
+  "log_sample": "<30>Nov 28 06:02:56 Ipad dnsmasq-dhcp[1]: DHCPACK(br-lan) 192.168.10.5 c8:90:8a:06:22:17 M14-Op-Ruben",
+  "forensic_analysis": "Field breakdown:\n- <30>: PRI (facility=3, severity=6) – informational message.\n- Nov 28 06:02:56: Timestamp (lokal WIB).\n- Ipad: Hostname perangkat OpenWrt.\n- dnsmasq-dhcp[1]: Proses dnsmasq (PID 1) yang menangani DHCP.\n- DHCPACK(br-lan): Tipe pesan DHCP (ACK) pada interface br-lan.\n- 192.168.10.5: Alamat IP yang diberikan.\n- c8:90:8a:06:22:17: MAC address klien.\n- M14-Op-Ruben: Hostname yang dilaporkan oleh klien (opsional).\n\nLog cron:\n- <75>: PRI dengan severity=3 (error) namun biasanya hanya level log yang dipilih oleh syslog.\n- crond[30704]: Daemon cron (PID 30704).\n- USER root pid 29894 cmd /usr/bin/aegis-blackbox.sh: Eksekusi skrip monitoring oleh user root, menunjukkan tugas rutin keamanan.\n\nTidak ada log error DHCP, tidak ada permintaan DHCP yang ditolak, dan tidak ada proses tidak dikenal. Aktivitas cron konsisten tiap 2‑5 menit, menandakan konfigurasi monitoring yang sah.",
+  "mitre_id": "T1016",
+  "mitre_name": "System Network Configuration Discovery",
+  "mitre_desc": "Permintaan DHCP (DHCPREQUEST/DHCPACK) mencerminkan perangkat yang mengumpulkan informasi jaringan (IP, subnet, gateway). Pada MITRE ATT&CK, ini termasuk teknik T1016 dimana penyerang atau alat keamanan mengumpulkan konfigurasi jaringan untuk pemetaan. SOC dapat mendeteksi anomali dengan memantau frekuensi DHCP, MAC address yang tidak dikenal, atau pola permintaan yang tidak biasa.",
+  "mini_drill": "cat /tmp/dhcp.leases   # Tampilkan lease DHCP aktif dan verifikasi MAC/IP yang terdaftar dalam 5 menit",
+  "updated_at": "28 Nov 2026 07:00 WIB",
+  "log_lines": 3970,
+  "ram_status": "691 / 1679 MB (Free 988 MB)",
   "model": "openai/gpt-oss-120b",
   "fim_status": "VERIFIED",
   "fim_detail": "2 file kritis utuh (SHA-256 cocok)",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "28/11 06:14 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (177.75.235.46)",
-      "detail": "User: ubuntu/P@ssw0rd!@#$ | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
-    },
     {
       "ts": "28/11 06:15 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (177.75.235.46)",
       "detail": "User: ubuntu/Admin@123. | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
+    },
+    {
+      "ts": "28/11 06:54 WIB",
+      "sev": "P1-HONEYPOT CMD",
+      "src": "Cowrie-Trap",
+      "title": "Perintah Penyerang (177.75.235.46)",
+      "detail": "CMD: echo xsec | Abuse: 100% (BR, Garra Fibra) | Shodan Ports: [22,5432] | CVEs: 0"
     }
   ]
 }
