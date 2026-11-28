@@ -7,7 +7,7 @@
   "mitre_name": "System Network Configuration Discovery",
   "mitre_desc": "Permintaan DHCP (DHCPREQUEST/DHCPACK) mencerminkan perangkat yang mengumpulkan informasi jaringan (IP, subnet, gateway). Pada MITRE ATT&CK, ini termasuk teknik T1016 dimana penyerang atau alat keamanan mengumpulkan konfigurasi jaringan untuk pemetaan. SOC dapat mendeteksi anomali dengan memantau frekuensi DHCP, MAC address yang tidak dikenal, atau pola permintaan yang tidak biasa.",
   "mini_drill": "cat /tmp/dhcp.leases   # Tampilkan lease DHCP aktif dan verifikasi MAC/IP yang terdaftar dalam 5 menit",
-  "updated_at": "28/11 22:40 WIB",
+  "updated_at": "28/11 22:46 WIB",
   "log_lines": 3970,
   "ram_status": "691 / 1679 MB (Free 988 MB)",
   "model": "openai/gpt-oss-120b",
@@ -28,13 +28,6 @@
     }
   ],
   "recent_alerts": [
-    {
-      "ts": "28/11 22:04 WIB",
-      "sev": "P1-HONEYPOT",
-      "src": "Cowrie-Trap",
-      "title": "Penyerang Masuk Honeypot (157.230.241.106)",
-      "detail": "User: butter/123456 | Abuse: 19% (SG, DigitalOcean, LLC) | Shodan Ports: [80,443] | CVEs: 0"
-    },
     {
       "ts": "28/11 22:12 WIB",
       "sev": "P1-HONEYPOT",
@@ -111,6 +104,13 @@
       "src": "Cowrie-Trap",
       "title": "Penyerang Masuk Honeypot (172.238.15.29)",
       "detail": "User: myftp/1234qwer | Abuse: 20% (JP, Linode)"
+    },
+    {
+      "ts": "28/11 22:46 WIB",
+      "sev": "P1-HONEYPOT",
+      "src": "Cowrie-Trap",
+      "title": "Penyerang Masuk Honeypot (212.56.43.199)",
+      "detail": "User: guest/12345 | Abuse: 100% (US, Contabo GmbH) | Shodan Ports: [143,587,636,5555,8090,8888] | CVEs: 4"
     }
   ]
 }
